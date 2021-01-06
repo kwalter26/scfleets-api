@@ -1,7 +1,4 @@
-package com.fusionkoding.citizenshqapi.entities;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.fusionkoding.citizenshqapi.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "ships")
-public class Ship {
-    @Id
+public class ShipDTO {
     private String id;
     private Long rsiId;
     private String name;
