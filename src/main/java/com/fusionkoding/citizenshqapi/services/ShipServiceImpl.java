@@ -3,6 +3,9 @@ package com.fusionkoding.citizenshqapi.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
+import com.fusionkoding.citizenshqapi.client.models.ShipMatrixResponse;
+import com.fusionkoding.citizenshqapi.client.models.ShipResponse;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.entities.Ship;
 import com.fusionkoding.citizenshqapi.repositories.ShipRepository;
@@ -17,8 +20,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ShipServiceImpl implements ShipService {
 
+    /**
+     *
+     */
+    private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Ship Not Found");
     private final ShipRepository shipRepository;
     private final ModelMapper modelMapper;
+    private final RsiSiteClient rsiSiteClient;
 
     @Override
     public List<ShipDTO> getShips() {
@@ -29,8 +37,7 @@ public class ShipServiceImpl implements ShipService {
 
     @Override
     public ShipDTO getShipById(String shipId) throws NotFoundException {
-        return convertToShipDto(
-                shipRepository.findById(shipId).orElseThrow(() -> new NotFoundException("Ship Not Found")));
+        return convertToShipDto(shipRepository.findById(shipId).orElseThrow(() -> NOT_FOUND_EXCEPTION));
     }
 
     @Override
@@ -41,12 +48,12 @@ public class ShipServiceImpl implements ShipService {
 
     @Override
     public ShipDTO updateShip(String shipId, String name, String productionStatus, Double length, Double beam,
-            Double height, String size, Double mass, String type, Double cargocapacity, Double minCrew, Double maxCrew,
+            Double height, String size, Double mass, String type, Double cargoCapacity, Double minCrew, Double maxCrew,
             Double scmSpeed, Double afterburnerSpeed, Double pitchMax, Double yawMax, Double rollMax,
-            Double xaxisAcceleration, Double yaxisAcceleration, Double zaxisAcceleration, String timeModified,
+            Double xAxisAcceleration, Double yAxisAcceleration, Double zAxisAcceleration, String timeModified,
             String focus, String description, String manufacturerCode, String manufacturerName, String imgUrl)
             throws NotFoundException {
-        Ship ship = shipRepository.findById(shipId).orElseThrow(() -> new NotFoundException("Ship Not Found"));
+        Ship ship = shipRepository.findById(shipId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         if (name != null)
             ship.setName(name);
         if (productionStatus != null)
@@ -63,8 +70,8 @@ public class ShipServiceImpl implements ShipService {
             ship.setMass(mass);
         if (type != null)
             ship.setType(type);
-        if (cargocapacity != null)
-            ship.setCargocapacity(cargocapacity);
+        if (cargoCapacity != null)
+            ship.setCargoCapacity(cargoCapacity);
         if (minCrew != null)
             ship.setMinCrew(minCrew);
         if (maxCrew != null)
@@ -79,12 +86,12 @@ public class ShipServiceImpl implements ShipService {
             ship.setYawMax(yawMax);
         if (rollMax != null)
             ship.setRollMax(rollMax);
-        if (xaxisAcceleration != null)
-            ship.setXaxisAcceleration(xaxisAcceleration);
-        if (yaxisAcceleration != null)
-            ship.setYaxisAcceleration(yaxisAcceleration);
-        if (zaxisAcceleration != null)
-            ship.setZaxisAcceleration(zaxisAcceleration);
+        if (xAxisAcceleration != null)
+            ship.setXAxisAcceleration(xAxisAcceleration);
+        if (yAxisAcceleration != null)
+            ship.setYAxisAcceleration(yAxisAcceleration);
+        if (zAxisAcceleration != null)
+            ship.setZAxisAcceleration(zAxisAcceleration);
         if (timeModified != null)
             ship.setTimeModified(timeModified);
         if (focus != null)
@@ -102,15 +109,26 @@ public class ShipServiceImpl implements ShipService {
 
     @Override
     public ShipDTO replaceShip(String shipId, ShipDTO shipDto) throws NotFoundException {
-        Ship ship = shipRepository.findById(shipId).orElseThrow(() -> new NotFoundException("Ship Not Found"));
+        Ship ship = shipRepository.findById(shipId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         shipDto.setId(ship.getId());
         return createShip(shipDto);
     }
 
     @Override
     public void deleteShip(String shipId) throws NotFoundException {
-        Ship ship = shipRepository.findById(shipId).orElseThrow(() -> new NotFoundException("Ship Not Found"));
+        Ship ship = shipRepository.findById(shipId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         shipRepository.delete(ship);
+    }
+
+    @Override
+    public List<ShipDTO> reloadShip() {
+        ShipMatrixResponse response = rsiSiteClient.getShipMatrix();
+        return response.getData().stream().map(ship -> createShip(convertShipResponsetoDto(ship)))
+                .collect(Collectors.toList());
+    }
+
+    private ShipDTO convertShipResponsetoDto(ShipResponse shipResponse) {
+        return modelMapper.map(shipResponse, ShipDTO.class);
     }
 
     private ShipDTO convertToShipDto(Ship ship) {

@@ -27,7 +27,7 @@ public class Ship {
     private String size;
     private Double mass;
     private String type;
-    private Double cargocapacity;
+    private Double cargoCapacity;
     private Double minCrew;
     private Double maxCrew;
     private Double scmSpeed;
@@ -35,9 +35,9 @@ public class Ship {
     private Double pitchMax;
     private Double yawMax;
     private Double rollMax;
-    private Double xaxisAcceleration;
-    private Double yaxisAcceleration;
-    private Double zaxisAcceleration;
+    private Double xAxisAcceleration;
+    private Double yAxisAcceleration;
+    private Double zAxisAcceleration;
     private String timeModified;
     private String focus;
     private String description;

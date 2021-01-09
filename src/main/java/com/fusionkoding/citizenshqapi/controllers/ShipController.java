@@ -2,6 +2,10 @@ package com.fusionkoding.citizenshqapi.controllers;
 
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fusionkoding.citizenshqapi.client.models.ShipResponse;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.services.ShipService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
@@ -19,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/ships")
@@ -29,11 +35,13 @@ public class ShipController {
 
     @GetMapping("/")
     public ResponseEntity<List<ShipDTO>> getShips() {
+        log.debug("Getting all ships");
         return ResponseEntity.ok(shipService.getShips());
     }
 
     @GetMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> getShip(@PathVariable String shipId) throws NotFoundException {
+        log.debug("Getting ship for id: " + shipId);
         return ResponseEntity.ok(shipService.getShipById(shipId));
     }
 
@@ -73,6 +81,12 @@ public class ShipController {
     @DeleteMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> deleteShip(@PathVariable String shipId) throws NotFoundException {
         shipService.deleteShip(shipId);
+        return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/reload/")
+    public ResponseEntity<Object> reloadShips() {
+        shipService.reloadShip();
         return ResponseEntity.accepted().build();
     }
 
