@@ -60,20 +60,24 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public OrgDTO replaceOrg(String orgId, OrgDTO orgDTO) throws NotFoundException {
-        // TODO Auto-generated method stub
-        return null;
+        log.debug("Replaced org for: " + orgDTO.getName());
+        Org org = orgRepository.findById(orgId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
+        orgDTO.setId(org.getId());
+        OrgDTO replacedOrg = convertToDto(orgRepository.save(convertToEntity(orgDTO)));
+        log.debug("Replaced org for: " + replacedOrg.getName());
+        return convertToDto(orgRepository.save(convertToEntity(orgDTO)));
     }
 
     @Override
     public OrgDTO updateOrgWithSymbol(String symbol, String name, String description, String leaderHandle,
             String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
             Long members) throws NotFoundException {
-        log.info("Updating org for: " + name);
+        log.debug("Updating org for: " + name);
         Org org = orgRepository.findBySymbol(symbol).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         updateOrParameters(name, description, leaderHandle, imageUrl, archeType, lang, commitment, recruiting, rolePlay,
                 members, org);
         OrgDTO orgDTO = convertToDto(orgRepository.save(org));
-        log.info("Updated org for: " + name);
+        log.debug("Updated org for: " + name);
         return orgDTO;
     }
 
@@ -129,12 +133,6 @@ public class OrgServiceImpl implements OrgService {
         if (members != null) {
             org.setMembers(members);
         }
-    }
-
-    @Override
-    public List<OrgDTO> reloadOrgs() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

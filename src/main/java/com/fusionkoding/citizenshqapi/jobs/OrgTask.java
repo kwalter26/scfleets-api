@@ -41,8 +41,6 @@ public class OrgTask extends TimerTask {
 
         log.info("Fetching page ---- " + pageNumber);
 
-        OrgRequestBody orgRequest = OrgRequestBody.builder().page(pageNumber).build();
-
         OrgResponse response = rsiSiteClient.getOrgs(pageNumber);
 
         OrgData orgData = response.getData();
@@ -53,7 +51,7 @@ public class OrgTask extends TimerTask {
         Document doc = Jsoup.parse(orgData.getHtml());
         Elements elements = doc.getElementsByClass("org-cell");
 
-        if (elements.size() == 0) {
+        if (elements.isEmpty()) {
             log.info("No Elements Returned for page" + pageNumber);
             timer.cancel();
         }

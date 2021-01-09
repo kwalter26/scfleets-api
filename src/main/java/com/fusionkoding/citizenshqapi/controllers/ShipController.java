@@ -80,10 +80,4 @@ public class ShipController {
         return ResponseEntity.accepted().build();
     }
 
-    @GetMapping("/reload/")
-    public ResponseEntity<Object> reloadShips() {
-        shipService.reloadShip();
-        return ResponseEntity.accepted().build();
-    }
-
 }

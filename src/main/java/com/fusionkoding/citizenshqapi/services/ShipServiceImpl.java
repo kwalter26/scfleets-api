@@ -120,17 +120,6 @@ public class ShipServiceImpl implements ShipService {
         shipRepository.delete(ship);
     }
 
-    @Override
-    public List<ShipDTO> reloadShip() {
-        ShipMatrixResponse response = rsiSiteClient.getShipMatrix();
-        return response.getData().stream().map(ship -> createShip(convertShipResponsetoDto(ship)))
-                .collect(Collectors.toList());
-    }
-
-    private ShipDTO convertShipResponsetoDto(ShipResponse shipResponse) {
-        return modelMapper.map(shipResponse, ShipDTO.class);
-    }
-
     private ShipDTO convertToShipDto(Ship ship) {
         return modelMapper.map(ship, ShipDTO.class);
     }

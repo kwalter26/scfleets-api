@@ -29,6 +29,4 @@ public interface OrgService {
 
     public void deleteOrg(String orgId) throws NotFoundException;
 
-    public List<OrgDTO> reloadOrgs();
-
 }
