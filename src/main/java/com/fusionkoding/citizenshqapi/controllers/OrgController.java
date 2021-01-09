@@ -34,11 +34,11 @@ public class OrgController {
     }
 
     @GetMapping("/reload/")
-    public ResponseEntity<Object> reloadOrgs(@PathVariable(required = false) long interval) {
+    public ResponseEntity<Object> reloadOrgs(@PathVariable(required = false) Long interval) {
         log.debug("Reloading Orgs");
         Timer timer = new Timer();
-        if (interval == 0) {
-            interval = 600;
+        if (interval == null) {
+            interval = 600L;
         }
         timer.schedule(new OrgTask(rsiSiteClient, orgService, timer), 0, interval);
         log.info("HERE---------------------");
