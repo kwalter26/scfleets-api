@@ -35,7 +35,7 @@ public class DataLoaderServiceImpl implements DataLoaderService {
 
     @Override
     public void reloadOrgs(Long interval) {
-        log.debug("Reloading Orgs");
+        log.info("Reloading Orgs on interval: 32 orgs per " + interval + " sec");
         Timer timer = new Timer();
         if (interval == null) {
             interval = 600L;
