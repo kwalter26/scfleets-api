@@ -26,7 +26,7 @@ public class Org {
     private String archeType;
     private String lang;
     private String commitment;
-    private String recruiting;
-    private String rolePlay;
-    private long members;
+    private Boolean recruiting;
+    private Boolean rolePlay;
+    private Long members;
 }

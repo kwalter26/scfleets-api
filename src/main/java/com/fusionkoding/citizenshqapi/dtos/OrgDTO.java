@@ -21,7 +21,7 @@ public class OrgDTO {
     private String archeType;
     private String lang;
     private String commitment;
-    private String recruiting;
-    private String rolePlay;
+    private Boolean recruiting;
+    private Boolean rolePlay;
     private long members;
 }
