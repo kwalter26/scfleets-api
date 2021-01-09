@@ -2,10 +2,6 @@ package com.fusionkoding.citizenshqapi.controllers;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fusionkoding.citizenshqapi.client.models.ShipResponse;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.services.ShipService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;

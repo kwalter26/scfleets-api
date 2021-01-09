@@ -2,7 +2,6 @@ package com.fusionkoding.citizenshqapi.services;
 
 import java.util.List;
 
-import com.fusionkoding.citizenshqapi.client.models.ShipResponse;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
