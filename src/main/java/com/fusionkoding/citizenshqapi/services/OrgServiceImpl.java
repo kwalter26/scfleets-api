@@ -3,7 +3,6 @@ package com.fusionkoding.citizenshqapi.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.entities.Org;
 import com.fusionkoding.citizenshqapi.repositories.OrgRepository;
@@ -24,7 +23,6 @@ public class OrgServiceImpl implements OrgService {
     private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Org Not Found");
     private final OrgRepository orgRepository;
     private final ModelMapper modelMapper;
-    private final RsiSiteClient rsiSiteClient;
 
     @Override
     public List<OrgDTO> getOrgs() {

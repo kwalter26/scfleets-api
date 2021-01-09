@@ -3,9 +3,6 @@ package com.fusionkoding.citizenshqapi.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
-import com.fusionkoding.citizenshqapi.client.models.ShipMatrixResponse;
-import com.fusionkoding.citizenshqapi.client.models.ShipResponse;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.entities.Ship;
 import com.fusionkoding.citizenshqapi.repositories.ShipRepository;
@@ -26,7 +23,6 @@ public class ShipServiceImpl implements ShipService {
     private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Ship Not Found");
     private final ShipRepository shipRepository;
     private final ModelMapper modelMapper;
-    private final RsiSiteClient rsiSiteClient;
 
     @Override
     public List<ShipDTO> getShips() {

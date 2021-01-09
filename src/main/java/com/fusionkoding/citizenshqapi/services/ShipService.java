@@ -23,7 +23,4 @@ public interface ShipService {
             throws NotFoundException;
 
     public void deleteShip(String shipId) throws NotFoundException;
-
-    public List<ShipDTO> reloadShip();
-
 }

@@ -7,7 +7,6 @@ import java.util.TimerTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
 import com.fusionkoding.citizenshqapi.client.models.OrgData;
-import com.fusionkoding.citizenshqapi.client.models.OrgRequestBody;
 import com.fusionkoding.citizenshqapi.client.models.OrgResponse;
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.services.OrgService;
@@ -45,7 +44,7 @@ public class OrgTask extends TimerTask {
 
         OrgData orgData = response.getData();
         if (orgData == null) {
-            this.log.info("No Data Returned for page" + pageNumber);
+            log.info("No Data Returned for page" + pageNumber);
             timer.cancel();
         }
         Document doc = Jsoup.parse(orgData.getHtml());
