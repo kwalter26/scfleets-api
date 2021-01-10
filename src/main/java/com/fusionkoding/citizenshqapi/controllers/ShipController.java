@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,29 +32,34 @@ public class ShipController {
 
     public final ShipService shipService;
 
+    @ApiOperation(value = "View a list of available ship")
     @GetMapping("/")
     public ResponseEntity<List<ShipDTO>> getShips() {
         log.debug("Getting all ships");
         return ResponseEntity.ok(shipService.getShips());
     }
 
+    @ApiOperation(value = "Retrieved an ship with and ship ID")
     @GetMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> getShip(@PathVariable String shipId) throws NotFoundException {
         log.debug("Getting ship for id: " + shipId);
         return ResponseEntity.ok(shipService.getShipById(shipId));
     }
 
+    @ApiOperation(value = "Create a new ship")
     @PostMapping("/")
     public ResponseEntity<ShipDTO> createShip(@RequestBody ShipDTO shipDTO) {
         return ResponseEntity.ok(shipService.createShip(shipDTO));
     }
 
+    @ApiOperation(value = "Replace an existing ship")
     @PutMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> replaceShip(@PathVariable String shipId, @RequestBody ShipDTO shipDTO)
             throws NotFoundException {
         return ResponseEntity.ok(shipService.replaceShip(shipId, shipDTO));
     }
 
+    @ApiOperation(value = "Update an existing ship with specific fields")
     @PatchMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> updateShip(@PathVariable String shipId, @RequestParam String name,
             @RequestParam(required = false) String productionStatus, @RequestParam(required = false) Double length,
@@ -76,6 +82,7 @@ public class ShipController {
                 manufacturerCode, manufacturerName, imgUrl));
     }
 
+    @ApiOperation(value = "Dalete an ship with ship ID")
     @DeleteMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> deleteShip(@PathVariable String shipId) throws NotFoundException {
         shipService.deleteShip(shipId);
