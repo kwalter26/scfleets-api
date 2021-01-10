@@ -56,10 +56,11 @@ public class OrgTask extends TimerTask {
         }
 
         for (Element element : elements) {
-            OrgDTO orgDTO = parseOrg(element)
+            OrgDTO orgDTO = parseOrg(element);
             try {
-                orgService.updateOrgWithSymbol(orgDTO.getSymbol(), orgDTO.getName(), null, null, orgDTO.getImageUrl(), orgDTO.getArcheType(), orgDTO.getLang(), orgDTO.getCommitment(),
-                        orgDTO.getRecruiting(), orgDTO.getRolePlay(), orgDTO.getMembers());
+                orgService.updateOrgWithSymbol(orgDTO.getSymbol(), orgDTO.getName(), null, null, orgDTO.getImageUrl(),
+                        orgDTO.getArcheType(), orgDTO.getLang(), orgDTO.getCommitment(), orgDTO.getRecruiting(),
+                        orgDTO.getRolePlay(), orgDTO.getMembers());
             } catch (NotFoundException e) {
                 orgService.createOrg(orgDTO);
             }
