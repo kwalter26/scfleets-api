@@ -43,11 +43,14 @@ public class OrgTask extends TimerTask {
         OrgResponse response = rsiSiteClient.getOrgs(pageNumber);
 
         OrgData orgData = response.getData();
+        String html = "";
         if (orgData == null) {
             log.info("No Data Returned for page" + pageNumber);
             timer.cancel();
+        } else {
+            html = orgData.getHtml();
         }
-        Document doc = Jsoup.parse(orgData.getHtml());
+        Document doc = Jsoup.parse(html);
         Elements elements = doc.getElementsByClass("org-cell");
 
         if (elements.isEmpty()) {

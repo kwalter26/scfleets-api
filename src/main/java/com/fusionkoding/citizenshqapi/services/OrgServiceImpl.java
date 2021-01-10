@@ -138,8 +138,8 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public void deleteOrg(String orgId) throws NotFoundException {
-        // TODO Auto-generated method stub
-
+        Org org = orgRepository.findById(orgId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
+        orgRepository.delete(org);
     }
 
     private OrgDTO convertToDto(Org org) {
