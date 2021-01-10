@@ -60,7 +60,7 @@ public class OrgTask extends TimerTask {
             try {
                 orgService.updateOrgWithSymbol(orgDTO.getSymbol(), orgDTO.getName(), null, null, orgDTO.getImageUrl(),
                         orgDTO.getArcheType(), orgDTO.getLang(), orgDTO.getCommitment(), orgDTO.getRecruiting(),
-                        orgDTO.getRolePlay(), orgDTO.getMembers());
+                        orgDTO.getRolePlay(), orgDTO.getMembers(), orgDTO.getUri());
             } catch (NotFoundException e) {
                 orgService.createOrg(orgDTO);
             }
@@ -70,7 +70,7 @@ public class OrgTask extends TimerTask {
 
     private OrgDTO parseOrg(Element element) {
         String name = element.select("h3.name").first().text();
-        String url = element.select("a.clearfix").first().attr("href");
+        String uri = element.select("a.clearfix").first().attr("href");
         String symbol = element.select("span.symbol").first().text();
         String lang = element.select("span.right > span:nth-child(1) > span:nth-child(2) > span.value").first().text();
         String archetype = element.select("span.right > span:nth-child(1) > span:nth-child(1) > span.value").first()
@@ -90,7 +90,7 @@ public class OrgTask extends TimerTask {
             log.error("Members was not a Long value", e);
         }
         return OrgDTO.builder().name(name).symbol(symbol).imageUrl(imageUrl).archeType(archetype).lang(lang)
-                .commitment(commitment).recruiting(recruiting).rolePlay(rolePlay).members(members).build();
+                .commitment(commitment).recruiting(recruiting).rolePlay(rolePlay).members(members).uri(uri).build();
     }
 
 }

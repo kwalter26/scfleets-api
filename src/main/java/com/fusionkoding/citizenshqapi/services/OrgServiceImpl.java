@@ -69,11 +69,11 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public OrgDTO updateOrgWithSymbol(String symbol, String name, String description, String leaderHandle,
             String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members) throws NotFoundException {
+            Long members, String uri) throws NotFoundException {
         log.debug("Updating org for: " + name);
         Org org = orgRepository.findBySymbol(symbol).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         updateOrParameters(name, description, leaderHandle, imageUrl, archeType, lang, commitment, recruiting, rolePlay,
-                members, org);
+                members, uri, org);
         OrgDTO orgDTO = convertToDto(orgRepository.save(org));
         log.debug("Updated org for: " + name);
         return orgDTO;
@@ -82,7 +82,7 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public OrgDTO updateOrg(String orgId, String symbol, String name, String description, String leaderHandle,
             String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members) throws NotFoundException {
+            Long members, String uri) throws NotFoundException {
         Org org;
         log.debug("Updating org for: " + name);
 
@@ -92,7 +92,7 @@ public class OrgServiceImpl implements OrgService {
             org = orgRepository.findBySymbol(symbol).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         }
         updateOrParameters(name, description, leaderHandle, imageUrl, archeType, lang, commitment, recruiting, rolePlay,
-                members, org);
+                members, uri, org);
         OrgDTO orgDTO = convertToDto(orgRepository.save(org));
         log.debug("Updated org for: " + name);
         return orgDTO;
@@ -100,7 +100,7 @@ public class OrgServiceImpl implements OrgService {
 
     private void updateOrParameters(String name, String description, String leaderHandle, String imageUrl,
             String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay, Long members,
-            Org org) {
+            String uri, Org org) {
         if (name != null) {
             org.setName(name);
         }
@@ -130,6 +130,9 @@ public class OrgServiceImpl implements OrgService {
         }
         if (members != null) {
             org.setMembers(members);
+        }
+        if (uri != null) {
+            org.setUri(uri);
         }
     }
 

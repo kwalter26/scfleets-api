@@ -29,4 +29,5 @@ public class Org {
     private Boolean recruiting;
     private Boolean rolePlay;
     private Long members;
+    private String uri;
 }

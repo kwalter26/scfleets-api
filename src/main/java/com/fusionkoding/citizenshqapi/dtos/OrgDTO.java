@@ -24,4 +24,5 @@ public class OrgDTO {
     private Boolean recruiting;
     private Boolean rolePlay;
     private long members;
+    private String uri;
 }

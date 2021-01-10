@@ -8,13 +8,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class RsiSiteClient {
 
+    private static final String GET_ORGS = "https://robertsspaceindustries.com/api/orgs/getOrgs";
     private static final String SHIP_MATRIX_URL = "https://robertsspaceindustries.com/ship-matrix/index";
     private final RestTemplate restTemplate;
 
@@ -24,8 +23,7 @@ public class RsiSiteClient {
 
     public OrgResponse getOrgs(long pageNumber) {
         OrgRequestBody orgRequest = OrgRequestBody.builder().page(pageNumber).build();
-        return restTemplate.postForObject("https://robertsspaceindustries.com/api/orgs/getOrgs", orgRequest,
-                OrgResponse.class);
+        return restTemplate.postForObject(GET_ORGS, orgRequest, OrgResponse.class);
     }
 
 }

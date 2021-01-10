@@ -21,11 +21,11 @@ public interface OrgService {
 
     public OrgDTO updateOrg(String orgId, String name, String symbol, String description, String leaderHandle,
             String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members) throws NotFoundException;
+            Long members, String uri) throws NotFoundException;
 
     public OrgDTO updateOrgWithSymbol(String name, String symbol, String description, String leaderHandle,
             String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members) throws NotFoundException;
+            Long members, String uri) throws NotFoundException;
 
     public void deleteOrg(String orgId) throws NotFoundException;
 
