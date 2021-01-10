@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/loader/")
 @Controller
+@Api(tags = {
+        "Data Loader" }, value = "DataLoader", description = "Routes used for maintaining the population of RSI specific data.")
 public class DataLoaderController {
 
     private final DataLoaderService dataLoaderService;
