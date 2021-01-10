@@ -56,38 +56,40 @@ public class OrgTask extends TimerTask {
         }
 
         for (Element element : elements) {
-            String name = element.select("h3.name").first().text();
-            String url = element.select("a.clearfix").first().attr("href");
-            String symbol = element.select("span.symbol").first().text();
-            String lang = element.select("span.right > span:nth-child(1) > span:nth-child(1) > span.value").first()
-                    .text();
-            String archetype = element.select("span.right > span:nth-child(1) > span:nth-child(2) > span.value").first()
-                    .text();
-            String commitment = element.select("span.right > span:nth-child(1) > span:nth-child(3) > span.value")
-                    .first().text();
-            String imageUrl = element.select("span > img").first().attr("src");
-            Boolean recruiting = element.select("span.right > span:nth-child(2) > span:nth-child(1) > span.value")
-                    .first().text().equals("Yes");
-            Boolean rolePlay = element.select("span.right > span:nth-child(2) > span:nth-child(2) > span.value").first()
-                    .text().equals("Yes");
-            Long members = 0L;
+            OrgDTO orgDTO = parseOrg(element)
             try {
-                members = Long.parseLong(element
-                        .select("span.right > span:nth-child(2) > span:nth-child(3) > span.value").first().text());
-            } catch (NumberFormatException e) {
-                log.error("Members was not a Long value", e);
-            }
-            try {
-                orgService.updateOrgWithSymbol(symbol, name, null, null, imageUrl, archetype, lang, commitment,
-                        recruiting, rolePlay, members);
+                orgService.updateOrgWithSymbol(orgDTO.getSymbol(), orgDTO.getName(), null, null, orgDTO.getImageUrl(), orgDTO.getArcheType(), orgDTO.getLang(), orgDTO.getCommitment(),
+                        orgDTO.getRecruiting(), orgDTO.getRolePlay(), orgDTO.getMembers());
             } catch (NotFoundException e) {
-                OrgDTO orgDTO = OrgDTO.builder().name(name).symbol(symbol).imageUrl(imageUrl).archeType(archetype)
-                        .lang(lang).commitment(commitment).recruiting(recruiting).rolePlay(rolePlay).members(members)
-                        .build();
                 orgService.createOrg(orgDTO);
             }
         }
         pageNumber++;
+    }
+
+    private OrgDTO parseOrg(Element element) {
+        String name = element.select("h3.name").first().text();
+        String url = element.select("a.clearfix").first().attr("href");
+        String symbol = element.select("span.symbol").first().text();
+        String lang = element.select("span.right > span:nth-child(1) > span:nth-child(2) > span.value").first().text();
+        String archetype = element.select("span.right > span:nth-child(1) > span:nth-child(1) > span.value").first()
+                .text();
+        String commitment = element.select("span.right > span:nth-child(1) > span:nth-child(3) > span.value").first()
+                .text();
+        String imageUrl = element.select("span > img").first().attr("src");
+        Boolean recruiting = element.select("span.right > span:nth-child(2) > span:nth-child(1) > span.value").first()
+                .text().equals("Yes");
+        Boolean rolePlay = element.select("span.right > span:nth-child(2) > span:nth-child(2) > span.value").first()
+                .text().equals("Yes");
+        Long members = 0L;
+        try {
+            members = Long.parseLong(
+                    element.select("span.right > span:nth-child(2) > span:nth-child(3) > span.value").first().text());
+        } catch (NumberFormatException e) {
+            log.error("Members was not a Long value", e);
+        }
+        return OrgDTO.builder().name(name).symbol(symbol).imageUrl(imageUrl).archeType(archetype).lang(lang)
+                .commitment(commitment).recruiting(recruiting).rolePlay(rolePlay).members(members).build();
     }
 
 }
