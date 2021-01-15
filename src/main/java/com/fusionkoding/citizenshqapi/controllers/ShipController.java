@@ -1,5 +1,6 @@
 package com.fusionkoding.citizenshqapi.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
@@ -7,6 +8,10 @@ import com.fusionkoding.citizenshqapi.services.ShipService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,6 +36,14 @@ import lombok.extern.slf4j.Slf4j;
 public class ShipController {
 
     public final ShipService shipService;
+
+    @CrossOrigin(origins = "http://localhost:6420")
+    @GetMapping("/test/")
+    public ResponseEntity<Principal> test(@AuthenticationPrincipal Principal principal) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        log.info(context.toString());
+        return ResponseEntity.ok(principal);
+    }
 
     @ApiOperation(value = "View a list of available ship")
     @GetMapping("/")

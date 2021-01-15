@@ -2,3 +2,18 @@ spring:
   data:
     mongodb:
       uri: ""
+  security.oauth2.resourceserver.jwt.jwk-set-uri: https://citizenshq.b2clogin.com/citizenshq.onmicrosoft.com/B2C_1_userflow/discovery/v2.0/keys #  https://citizenshq.b2clogin.com/citizenshq.onmicrosoft.com/B2C_1_userflow/v2.0/.well-known/openid-configuration #https://citizenshq.b2clogin.com/citizenshq.onmicrosoft.com/B2C_1_userflow/oauth2/v2.0/token
+logging:
+  level:
+    root: debug
+# azure:
+#   activedirectory:
+#     b2c:
+#       tenant: citizenshq
+#       client-id: 20672689-188b-484c-a515-970508fda961
+#     session-stateless: true
+# tenant-id: citizenshq
+
+# b2c:
+#   tenant: citizenshq
+#   client-id: 20672689-188b-484c-a515-970508fda961
