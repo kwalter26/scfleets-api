@@ -8,6 +8,7 @@ import com.fusionkoding.citizenshqapi.services.ShipService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,22 +38,17 @@ public class ShipController {
 
     public final ShipService shipService;
 
-    @CrossOrigin(origins = "http://localhost:8080")
-    @GetMapping("/test/")
-    public ResponseEntity<Principal> test(@AuthenticationPrincipal Principal principal) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        log.info(context.toString());
-        return ResponseEntity.ok(principal);
-    }
-
-    @CrossOrigin(origins = "http://localhost:8080")
+    @PreAuthorize("hasAnyRole('pilot','admin')")
     @ApiOperation(value = "View a list of available ship")
     @GetMapping("/")
     public ResponseEntity<List<ShipDTO>> getShips() {
         log.debug("Getting all ships");
+        SecurityContext context = SecurityContextHolder.getContext();
+        log.info(context.toString());
         return ResponseEntity.ok(shipService.getShips());
     }
 
+    @PreAuthorize("hasAnyRole('pilot','admin')")
     @ApiOperation(value = "Retrieved an ship with and ship ID")
     @GetMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> getShip(@PathVariable String shipId) throws NotFoundException {
@@ -60,12 +56,14 @@ public class ShipController {
         return ResponseEntity.ok(shipService.getShipById(shipId));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Create a new ship")
     @PostMapping("/")
     public ResponseEntity<ShipDTO> createShip(@RequestBody ShipDTO shipDTO) {
         return ResponseEntity.ok(shipService.createShip(shipDTO));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Replace an existing ship")
     @PutMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> replaceShip(@PathVariable String shipId, @RequestBody ShipDTO shipDTO)
@@ -73,6 +71,7 @@ public class ShipController {
         return ResponseEntity.ok(shipService.replaceShip(shipId, shipDTO));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Update an existing ship with specific fields")
     @PatchMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> updateShip(@PathVariable String shipId, @RequestParam String name,
@@ -96,6 +95,7 @@ public class ShipController {
                 manufacturerCode, manufacturerName, imgUrl));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Dalete an ship with ship ID")
     @DeleteMapping("/{shipId}/")
     public ResponseEntity<ShipDTO> deleteShip(@PathVariable String shipId) throws NotFoundException {

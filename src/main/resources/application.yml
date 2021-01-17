@@ -6,10 +6,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          # add your Cognito issuer endpoint here, the following does not exist ;)
           issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_wtTVpHEdZ
-logging:
-  level:
-    root: debug
-server:
-  port: 9090

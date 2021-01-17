@@ -7,6 +7,7 @@ import com.fusionkoding.citizenshqapi.services.OrgService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,6 +33,7 @@ public class OrgController {
 
     private final OrgService orgService;
 
+    @PreAuthorize("hasAnyRole('admin','pilot')")
     @ApiOperation(value = "View a list of available orgs")
     @GetMapping("/")
     public ResponseEntity<List<OrgDTO>> getOrgs() {
@@ -39,6 +41,7 @@ public class OrgController {
         return ResponseEntity.ok(orgService.getOrgs());
     }
 
+    @PreAuthorize("hasAnyRole('admin','pilot')")
     @ApiOperation(value = "Retrieved an org with and org ID")
     @GetMapping("/{orgId}/")
     public ResponseEntity<OrgDTO> getOrg(@PathVariable String orgId) throws NotFoundException {
@@ -46,12 +49,14 @@ public class OrgController {
         return ResponseEntity.ok(orgService.getOrgById(orgId));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Create a new org")
     @PostMapping("/")
     public ResponseEntity<OrgDTO> createOrg(@RequestBody OrgDTO orgDTO) {
         return ResponseEntity.ok(orgService.createOrg(orgDTO));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Replace an existing org")
     @PutMapping("/{orgId}/")
     public ResponseEntity<OrgDTO> replaceOrg(@PathVariable String orgId, @RequestBody OrgDTO orgDTO)
@@ -59,6 +64,7 @@ public class OrgController {
         return ResponseEntity.ok(orgService.replaceOrg(orgId, orgDTO));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Update an existing org with specific fields")
     @PatchMapping("/{orgId}/")
     public ResponseEntity<OrgDTO> updateOrg(@PathVariable String orgId, @RequestParam(required = false) String name,
@@ -72,6 +78,7 @@ public class OrgController {
                 archeType, lang, commitment, recruiting, rolePlay, members, uri));
     }
 
+    @PreAuthorize("hasRole('admin')")
     @ApiOperation(value = "Dalete an org with org ID")
     @DeleteMapping("/{orgId}/")
     public ResponseEntity<Object> deleteOrg(@PathVariable String orgId) throws NotFoundException {
