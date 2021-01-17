@@ -1,0 +1,7 @@
+services:
+  citizenshq-api:
+    image: citizenshqapi
+    environment:
+    - SPRING_DATA_MONGODB_URI=${SPRING_DATA_MONGODB_URI} 
+    ports:
+      - 9000:8080
