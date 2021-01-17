@@ -45,6 +45,7 @@ public class ShipController {
         return ResponseEntity.ok(principal);
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @ApiOperation(value = "View a list of available ship")
     @GetMapping("/")
     public ResponseEntity<List<ShipDTO>> getShips() {
