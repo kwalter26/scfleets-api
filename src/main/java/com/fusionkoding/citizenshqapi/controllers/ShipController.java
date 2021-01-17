@@ -37,7 +37,7 @@ public class ShipController {
 
     public final ShipService shipService;
 
-    @CrossOrigin(origins = "http://localhost:6420")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/test/")
     public ResponseEntity<Principal> test(@AuthenticationPrincipal Principal principal) {
         SecurityContext context = SecurityContextHolder.getContext();
