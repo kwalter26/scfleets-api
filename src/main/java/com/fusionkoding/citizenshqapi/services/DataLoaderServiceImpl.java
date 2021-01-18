@@ -45,7 +45,13 @@ public class DataLoaderServiceImpl implements DataLoaderService {
     }
 
     private ShipDTO convertShipResponsetoDto(ShipResponse shipResponse) {
-        return modelMapper.map(shipResponse, ShipDTO.class);
+        ShipDTO shipDto = modelMapper.map(shipResponse, ShipDTO.class);
+        String smallImage = shipResponse.getMedia().get(0).getImages().getSmall();
+        if (!smallImage.contains("https://")) {
+            smallImage = "https://robertsspaceindustries.com" + smallImage;
+        }
+        shipDto.setImgUrl(smallImage);
+        return shipDto;
     }
 
 }

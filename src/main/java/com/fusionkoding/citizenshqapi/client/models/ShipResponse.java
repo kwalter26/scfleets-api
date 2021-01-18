@@ -1,5 +1,7 @@
 package com.fusionkoding.citizenshqapi.client.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -54,4 +56,5 @@ public class ShipResponse {
     private String imgUrl;
 
     private Manufacturer manufacturer;
+    private List<ShipMedia> media;
 }
