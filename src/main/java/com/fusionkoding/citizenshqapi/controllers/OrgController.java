@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/orgs")
+@RequestMapping("/orgs")
 @Api(tags = { "Orgs" }, value = "Orgs", description = "Routes used for maintaining origization data.")
 public class OrgController {
 

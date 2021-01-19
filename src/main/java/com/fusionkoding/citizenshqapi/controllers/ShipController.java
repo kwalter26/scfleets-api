@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/ships")
+@RequestMapping("/ships")
 @Api(tags = { "Ships" }, value = "Ships", description = "Routes used for maintaining ship data.")
 public class ShipController {
 
