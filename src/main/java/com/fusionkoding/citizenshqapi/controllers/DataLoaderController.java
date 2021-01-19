@@ -13,7 +13,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/loader/")
+@RequestMapping("/loader")
 @Controller
 @Api(tags = {
         "Data Loader" }, value = "DataLoader", description = "Routes used for maintaining the population of RSI specific data.")

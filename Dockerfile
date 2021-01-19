@@ -11,7 +11,7 @@ WORKDIR ${BUILD_DIR}
 RUN chmod 777 ./gradlew
 RUN ./gradlew build --no-daemon
 
-FROM openjdk:11-jdk-buster
+FROM openjdk:11-jre-slim-buster
 ARG BUILD_DIR
 ARG RUN_DIR
 ARG JAR_FILE
