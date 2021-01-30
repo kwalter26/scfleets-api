@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and() // (1)
-                .authorizeRequests().anyRequest().authenticated() // (2)
+                .authorizeRequests().antMatchers("/actuator/health").permitAll().anyRequest().authenticated() // (2)
                 .and().oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter()); // (3)
     }
 
@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        jwtAuthenticationConverter.setPrincipalClaimName("username");
+        jwtAuthenticationConverter.setPrincipalClaimName("sub");
         return jwtAuthenticationConverter;
     }
 }

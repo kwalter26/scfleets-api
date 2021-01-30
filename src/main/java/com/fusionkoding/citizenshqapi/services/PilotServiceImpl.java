@@ -11,7 +11,6 @@ import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,17 +55,48 @@ public class PilotServiceImpl implements PilotService {
   }
 
   @Override
-  public PilotDTO updatePilot(String pilotId, String userName, String email, String rsiHandle, String rsiProfileImgUrl,
-      String lang, String timeZone, Boolean verfied, String verificationCode, String ueeRecordNumber, String fluency,
-      String enlistDate, String country) throws NotFoundException {
-    // TODO Auto-generated method stub
-    return null;
+  public PilotDTO updatePilot(String pilotId, String email, String rsiHandle, String rsiProfileImgUrl,
+                              String lang, String timeZone, Boolean verified, String verificationCode, String ueeRecordNumber, String fluency,
+                              String enlistDate, String country) throws NotFoundException {
+    Pilot pilot = pilotRepository.findById(pilotId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
+    if(!email.isEmpty()) {
+      pilot.setEmail(email);
+    }
+    if(!rsiHandle.isEmpty()) {
+      pilot.setRsiHandle(rsiHandle);
+    }
+    if(!rsiProfileImgUrl.isEmpty()) {
+      pilot.setRsiProfileImgUrl(rsiProfileImgUrl);
+    }
+    if(!lang.isEmpty()) {
+      pilot.setLang(lang);
+    }
+    if(!timeZone.isEmpty()) {
+      pilot.setTimeZone(timeZone);
+    }
+    pilot.setVerfied(verified);
+    if(!verificationCode.isEmpty()) {
+      pilot.setVerificationCode(verificationCode);
+    }
+    if(!ueeRecordNumber.isEmpty()) {
+      pilot.setUeeRecordNumber(ueeRecordNumber);
+    }
+    if(!fluency.isEmpty()) {
+      pilot.setFluency(fluency);
+    }
+    if(!enlistDate.isEmpty()) {
+      pilot.setEnlistDate(enlistDate);
+    }
+    if(!country.isEmpty()) {
+      pilot.setCountry(country);
+    }
+    return convertToDto(pilotRepository.save(pilot));
   }
 
   @Override
   public void deletePilot(String pilotId) throws NotFoundException {
-    // TODO Auto-generated method stub
-
+    Pilot pilot = pilotRepository.findById(pilotId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
+    pilotRepository.delete(pilot);
   }
 
   private PilotDTO convertToDto(Pilot org) {

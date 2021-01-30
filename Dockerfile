@@ -2,7 +2,7 @@ ARG BUILD_DIR=/home/gradle/src/
 ARG RUN_DIR=/app/
 ARG JAR_FILE=build/libs/*.jar
 
-FROM openjdk:11-jdk-buster AS build
+FROM gradle:6.6.1-jdk11 AS build
 ARG BUILD_DIR
 ARG RUN_DIR
 ARG JAR_FILE
