@@ -3,6 +3,7 @@ package com.fusionkoding.citizenshqapi.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fusionkoding.citizenshqapi.bindings.PilotInfoBinding;
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
 import com.fusionkoding.citizenshqapi.entities.Pilot;
 import com.fusionkoding.citizenshqapi.repositories.PilotRepository;
@@ -21,6 +22,7 @@ public class PilotServiceImpl implements PilotService {
 
   private final PilotRepository pilotRepository;
   private final ModelMapper modelMapper;
+  private final PilotInfoBinding pilotBinding;
   private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Pilot Not Found");
 
   @Override
@@ -74,7 +76,7 @@ public class PilotServiceImpl implements PilotService {
     if(!timeZone.isEmpty()) {
       pilot.setTimeZone(timeZone);
     }
-    pilot.setVerfied(verified);
+    pilot.setVerified(verified);
     if(!verificationCode.isEmpty()) {
       pilot.setVerificationCode(verificationCode);
     }
@@ -97,6 +99,10 @@ public class PilotServiceImpl implements PilotService {
   public void deletePilot(String pilotId) throws NotFoundException {
     Pilot pilot = pilotRepository.findById(pilotId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
     pilotRepository.delete(pilot);
+  }
+
+  public void getRsiPilotInfo(String pilotId) {
+    pilotBinding.getRsiPilotInfo(pilotId);
   }
 
   private PilotDTO convertToDto(Pilot org) {

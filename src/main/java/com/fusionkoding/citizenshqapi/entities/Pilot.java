@@ -25,7 +25,7 @@ public class Pilot {
   private String rsiProfileImgUrl;
   private String lang;
   private String timeZone;
-  private Boolean verfied;
+  private Boolean verified;
   private String verificationCode;
   private String ueeRecordNumber;
   private String fluency;
