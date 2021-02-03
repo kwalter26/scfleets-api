@@ -1,6 +1,7 @@
 package com.fusionkoding.citizenshqapi.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
 import com.fusionkoding.citizenshqapi.services.PilotService;
@@ -26,7 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/pilots")
 @Api(tags = { "Pilots" }, value = "Pilots")
 public class PilotController {
+
   public final PilotService pilotService;
+
+  @PreAuthorize("hasAnyRole('admin')")
+  @ApiOperation(value = "Retrieve all pilots")
+  @GetMapping("/")
+  public ResponseEntity<List<PilotDTO>> getPilots(){
+    log.debug("Getting all piltos");
+    return ResponseEntity.ok(pilotService.getPilots());
+  }
 
   @PreAuthorize("hasAnyRole('admin')")
   @ApiOperation(value = "Retrieved a pilot with a pilot ID")
@@ -46,7 +56,9 @@ public class PilotController {
     }
     String sub = jwt.getSubject();
     try {
-      return ResponseEntity.ok(pilotService.getPilotById(sub));
+      PilotDTO pilot = pilotService.getPilotById(sub);
+      pilotService.getRsiPilotInfo("av8r670");
+      return ResponseEntity.ok(pilot);
     } catch (NotFoundException ex) {
       log.info("Pilot not found for security principal. Creating initial user entry for user: " + sub);
       PilotDTO newPilot = pilotService.createPilot(PilotDTO.builder().id(sub).userName(jwt.getClaimAsString("cognito:username")).email(jwt.getClaimAsString("email")).build());
