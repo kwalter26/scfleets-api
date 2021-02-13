@@ -1,5 +1,6 @@
 package com.fusionkoding.citizenshqapi.bindings;
 
+import com.fusionkoding.citizenshqapi.bindings.models.InfoRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -17,11 +18,11 @@ public class PilotInfoBinding {
     private final StreamBridge streamBridge;
 
     @Bean
-    private Supplier<Message<String>> getRsiPilotInfo() {
-        return () -> MessageBuilder.withPayload("pilotId").build();
+    private Supplier<Message<InfoRequest>> getRsiPilotInfo() {
+        return () -> MessageBuilder.withPayload(InfoRequest.builder().build()).build();
     }
 
-    public void getRsiPilotInfo(String pilotId) {
-        streamBridge.send("pilot-info-events", MessageBuilder.withPayload(pilotId).build());
+    public void getRsiPilotInfo(String pilotId, String rsiHandle) {
+        streamBridge.send("pilot-info-events", MessageBuilder.withPayload(InfoRequest.builder().pilotId(pilotId).rsiHandle(rsiHandle).build()).build());
     }
 }

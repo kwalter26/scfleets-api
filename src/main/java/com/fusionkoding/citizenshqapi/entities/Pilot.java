@@ -9,18 +9,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Document(collection = "pilots")
 public class Pilot {
+
+  public Pilot() {
+    rsiProfileMap = new HashMap<>();
+  }
+
   @Id
   private String id;
   private String userName;
   private String email;
-  private Map<String,RsiProfile> rsiProfileMap;
+  private String defaultProfile;
+  @Builder.Default
+  private Map<String,RsiProfile> rsiProfileMap = new HashMap<>();
 }

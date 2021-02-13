@@ -18,5 +18,7 @@ spring:
           getRsiPilotInfo-out-0.destination: pilot-info-events
         source: getRsiPilotInfo
 
+authorities: {'access': 'scope', 'user': 'cognito:groups'}
+
 
 

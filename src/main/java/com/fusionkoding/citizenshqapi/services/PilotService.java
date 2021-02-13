@@ -17,17 +17,17 @@ public interface PilotService {
 
   PilotDTO createPilot(PilotDTO pilotDTO) throws DuplicateKeyException;
 
-  PilotDTO updatePilot(String pilotId, String email) throws NotFoundException;
+  PilotDTO updatePilot(String pilotId, String email, String defaultProfile) throws NotFoundException;
 
-  PilotDTO createReplaceRsiPilot(String pilotId, String rsiHandle, RsiProfile rsiProfile) throws NotFoundException;
+  PilotDTO createReplaceRsiPilot(String pilotId, RsiProfile rsiProfile) throws NotFoundException;
 
   PilotDTO updateRsiProfile(String pilotId, String rsiHandle, String rsiProfileImgUrl,
                             String timeZone, Boolean verified, String verificationCode, String ueeRecordNumber, String fluency,
-                            String enlistDate, String location) throws NotFoundException;
+                            String enlistDate, String location, String orgCode) throws NotFoundException;
 
   PilotDTO deleteRsiProfile(String pilotId, String rsiHandle) throws NotFoundException;
 
   void deletePilot(String pilotId) throws NotFoundException;
 
-  void getRsiPilotInfo(String pilotId);
+  void getRsiPilotInfo(String pilotId) throws NotFoundException;
 }

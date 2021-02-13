@@ -58,10 +58,13 @@ public class PilotServiceImpl implements PilotService {
     }
 
     @Override
-    public PilotDTO updatePilot(String pilotId, String email) throws NotFoundException {
+    public PilotDTO updatePilot(String pilotId, String email, String defaultProfile) throws NotFoundException {
         Pilot pilot = pilotRepository.findById(pilotId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
-        if (!email.isEmpty()) {
+        if (email != null && !email.isEmpty()) {
             pilot.setEmail(email);
+        }
+        if (defaultProfile != null && !defaultProfile.isEmpty() && pilot.getRsiProfileMap().containsKey(defaultProfile)) {
+            pilot.setDefaultProfile(defaultProfile);
         }
         return convertToDto(pilotRepository.save(pilot));
     }
@@ -73,15 +76,26 @@ public class PilotServiceImpl implements PilotService {
     }
 
     @Override
-    public void getRsiPilotInfo(String pilotId) {
-        pilotBinding.getRsiPilotInfo(pilotId);
+    public void getRsiPilotInfo(String pilotId) throws NotFoundException {
+        Pilot pilot = getPilot(pilotId);
+        pilot.getRsiProfileMap().forEach((rsiHandle,rsiProfile)->{
+            pilotBinding.getRsiPilotInfo(pilotId, rsiHandle);
+        });
     }
 
     @Override
-    public PilotDTO createReplaceRsiPilot(String pilotId, String rsiHandle, RsiProfile rsiProfile) throws NotFoundException {
+    public PilotDTO createReplaceRsiPilot(String pilotId, RsiProfile rsiProfile) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
+        if(rsiProfile.getRsiHandle() == null){
+            throw NOT_FOUND_EXCEPTION;
+        }
+        if(pilot.getRsiProfileMap().size()==0){
+            pilot.setDefaultProfile(rsiProfile.getRsiHandle());
+        }
         pilot.getRsiProfileMap().put(rsiProfile.getRsiHandle(), rsiProfile);
-        return convertToDto(pilotRepository.save(pilot));
+        Pilot updatePilot = pilotRepository.save(pilot);
+        getRsiPilotInfo(pilotId);
+        return convertToDto(updatePilot);
     }
 
     @Override
@@ -94,9 +108,15 @@ public class PilotServiceImpl implements PilotService {
                                      String ueeRecordNumber,
                                      String fluency,
                                      String enlistDate,
-                                     String location) throws NotFoundException {
+                                     String location, String orgSymbol) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
         RsiProfile profile = pilot.getRsiProfileMap().get(rsiHandle);
+        if(profile==null){
+            profile = RsiProfile.builder().rsiHandle(rsiHandle).build();
+            if(pilot.getRsiProfileMap().size()==0){
+                pilot.setDefaultProfile(rsiHandle);
+            }
+        }
 
         if (rsiProfileImgUrl != null) {
             profile.setRsiProfileImgUrl(rsiProfileImgUrl);
@@ -122,6 +142,11 @@ public class PilotServiceImpl implements PilotService {
         if (location != null) {
             profile.setLocation(location);
         }
+        if (orgSymbol != null) {
+            profile.setOrgSymbol(orgSymbol);
+        }
+
+        pilot.getRsiProfileMap().put(rsiHandle,profile);
 
         return convertToDto(pilotRepository.save(pilot));
     }

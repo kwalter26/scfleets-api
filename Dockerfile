@@ -1,13 +1,13 @@
-ARG BUILD_DIR=/home/gradle/src/
+ARG BUILD_DIR=/build/
 ARG RUN_DIR=/app/
 ARG JAR_FILE=build/libs/*.jar
 
-FROM gradle:6.6.1-jdk11 AS build
+FROM openjdk:11-jdk-buster AS build
 ARG BUILD_DIR
 ARG RUN_DIR
 ARG JAR_FILE
-COPY  . ${BUILD_DIR}
-WORKDIR ${BUILD_DIR}
+COPY  . /build/
+WORKDIR /build/
 RUN chmod 777 ./gradlew
 RUN ./gradlew build --no-daemon
 
@@ -15,7 +15,7 @@ FROM openjdk:11-jre-slim-buster
 ARG BUILD_DIR
 ARG RUN_DIR
 ARG JAR_FILE
-COPY --from=build "${BUILD_DIR}${JAR_FILE}" "${RUN_DIR}app.jar"
-WORKDIR ${RUN_DIR}
+COPY --from=build "/build/build/libs/*.jar" "/app/app.jar"
+WORKDIR /app/
 ENTRYPOINT ["java","-jar","app.jar"]
 EXPOSE 8080
