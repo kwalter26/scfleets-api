@@ -1,9 +1,24 @@
 spring:
   data:
     mongodb:
-      uri: ""
+      uri: ${MONGO_URL}
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_wtTVpHEdZ
+          issuer-uri: ${JWK_URL}
+  rabbitmq:
+    addresses: ${RABBIT_URL}
+
+  cloud:
+    stream:
+      function:
+        definition: generate
+        bindings:
+          getRsiPilotInfo-out-0.destination: pilot-info-events
+        source: getRsiPilotInfo
+
+authorities: {'access': 'scope', 'user': 'cognito:groups'}
+
+
+

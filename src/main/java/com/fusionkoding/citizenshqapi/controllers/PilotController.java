@@ -1,17 +1,18 @@
 package com.fusionkoding.citizenshqapi.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
+import com.fusionkoding.citizenshqapi.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.services.PilotService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,34 +23,114 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/pilots")
-@Api(tags = { "Pilots" }, value = "Pilots", description = "Routes used for maintaining pilot data.")
+@Api(tags = {"Pilots"}, value = "Pilots")
+@PreAuthorize("hasRole('transactions/post')")
 public class PilotController {
-  public final PilotService pilotService;
 
-  @PreAuthorize("hasAnyRole('admin')")
-  @ApiOperation(value = "Retrieved a pilot with a pilot ID")
-  @GetMapping("/{pilotId}/")
-  public ResponseEntity<PilotDTO> getPilot(@PathVariable String pilotId) throws NotFoundException {
-    log.debug("Getting pilot for id: " + pilotId);
-    return ResponseEntity.ok(pilotService.getPilotById(pilotId));
-  }
+    public final PilotService pilotService;
 
-  @PreAuthorize("hasAnyRole('pilot','admin')")
-  @ApiOperation(value = "Retrieved your pilot profile")
-  @GetMapping("/me/")
-  public ResponseEntity<PilotDTO> getPilot(Principal principal) {
-    log.debug("Getting pilot for id: " + principal.getName());
-    if (principal.getName().isEmpty()) {
-      return ResponseEntity.badRequest().build();
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @ApiOperation(value = "Retrieve all pilots")
+    @GetMapping("/")
+    public ResponseEntity<List<PilotDTO>> getPilots() {
+        log.debug("Getting all piltos");
+        return ResponseEntity.ok(pilotService.getPilots());
     }
-    String username = principal.getName();
-    try {
-      return ResponseEntity.ok(pilotService.getPilotByUsername(username));
-    } catch (NotFoundException ex) {
-      log.info("Pilot not found for security principal. Creating initial user entry for user: " + username);
-      PilotDTO newPilot = pilotService.createPilot(PilotDTO.builder().userName(username).build());
-      return ResponseEntity.ok(newPilot);
+
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @ApiOperation(value = "Retrieved a pilot with a pilot ID")
+    @GetMapping("/{pilotId}/")
+    public ResponseEntity<PilotDTO> getPilot(@PathVariable String pilotId) throws NotFoundException {
+        log.debug("Getting pilot for id: " + pilotId);
+        return ResponseEntity.ok(pilotService.getPilotById(pilotId));
     }
-  }
+
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @ApiOperation(value = "Retrieved your pilot profile")
+    @GetMapping("/me/")
+    public ResponseEntity<PilotDTO> getPilot(@AuthenticationPrincipal Jwt jwt, Principal principal) {
+        log.debug("Getting pilot for id: " + jwt.getSubject());
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+        try {
+            PilotDTO pilot = pilotService.getPilotById(sub);
+            pilotService.getRsiPilotInfo(pilot.getId());
+            return ResponseEntity.ok(pilot);
+        } catch (NotFoundException ex) {
+            log.info("Pilot not found for security principal. Creating initial user entry for user: " + sub);
+            PilotDTO newPilot = pilotService.createPilot(PilotDTO.builder().id(sub).userName(jwt.getClaimAsString("cognito:username")).email(jwt.getClaimAsString("email")).build());
+            return ResponseEntity.ok(newPilot);
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @ApiOperation(value = "Retrieved your pilot profile")
+    @PatchMapping("/me/")
+    public ResponseEntity<PilotDTO> updatePilot(@AuthenticationPrincipal Jwt jwt, Principal principal, @RequestParam(required = false) String email, @RequestParam(required = false) String defaultProfile) throws NotFoundException {
+        log.debug("Updating pilot for id: " + jwt.getSubject());
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+        return ResponseEntity.ok(pilotService.updatePilot(sub, email, defaultProfile));
+    }
+
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @PostMapping("/{piltoId}/profiles/")
+    public ResponseEntity<PilotDTO> addPilotInfo(@PathVariable String piltoId, @RequestBody RsiProfile rsiProfile) throws NotFoundException {
+
+        PilotDTO pilotDTO = pilotService.createReplaceRsiPilot(piltoId, rsiProfile);
+
+        return ResponseEntity.ok(pilotDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @PostMapping("/me/profiles/")
+    public ResponseEntity<PilotDTO> addPilotInfo(@AuthenticationPrincipal Jwt jwt, @RequestBody RsiProfile rsiProfile) throws NotFoundException {
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+
+        PilotDTO pilotDTO = pilotService.createReplaceRsiPilot(sub, rsiProfile);
+
+        return ResponseEntity.ok(pilotDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @DeleteMapping("/me/profiles/{rsiHandle}/")
+    public ResponseEntity<PilotDTO> deletePilotInfo(@AuthenticationPrincipal Jwt jwt, @PathVariable String rsiHandle) throws NotFoundException {
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+
+        PilotDTO pilotDTO = pilotService.deleteRsiProfile(sub, rsiHandle);
+
+        return ResponseEntity.ok(pilotDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @PatchMapping("/{piltoId}/profiles/{rsiHandle}/")
+    public ResponseEntity<PilotDTO> updatePilotInfo(@PathVariable String piltoId,
+                                                    @PathVariable String rsiHandle,
+                                                    @RequestBody RsiProfile rsiProfile)
+            throws NotFoundException {
+
+        PilotDTO pilotDTO = pilotService.updateRsiProfile(piltoId, rsiHandle,
+                rsiProfile.getRsiProfileImgUrl(),
+                rsiProfile.getTimeZone(),
+                rsiProfile.getVerified(),
+                rsiProfile.getVerificationCode(),
+                rsiProfile.getUeeRecordNumber(),
+                rsiProfile.getFluency(),
+                rsiProfile.getEnlistDate(),
+                rsiProfile.getLocation(),
+                rsiProfile.getOrgSymbol());
+
+        return ResponseEntity.ok(pilotDTO);
+    }
 
 }
