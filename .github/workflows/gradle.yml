@@ -42,6 +42,6 @@ jobs:
         # Path to the Dockerfile
         file: ./Dockerfile
         # List of tags
-        tags: registry.kkwalter.com/scfleetsapi:latest
+        tags: registry.digitalocean.com/scfleets/scfleetsapi:latest
         # Push is a shorthand for --output=type=registry
         push: true
