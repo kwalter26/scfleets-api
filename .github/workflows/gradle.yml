@@ -45,3 +45,5 @@ jobs:
         tags: registry.digitalocean.com/scfleets/scfleetsapi:latest
         # Push is a shorthand for --output=type=registry
         push: true
+    - name: Deploy Staging Version
+      run: doctl apps create-deployment ${{ secrets.APP_ID }} 
