@@ -1,5 +1,6 @@
 package com.fusionkoding.citizenshqapi.entities;
 
+import com.fusionkoding.citizenshqapi.dtos.MfaToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,6 @@ public class RsiAccount {
     @Builder.Default
     private RsiAuth rsiAuth = new RsiAuth();
     @Builder.Default
-    private List<String> mfaTokens = new ArrayList<>();
+    private List<MfaToken> mfaTokens = new ArrayList<>();
 }
 

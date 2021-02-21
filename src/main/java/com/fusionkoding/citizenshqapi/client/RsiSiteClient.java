@@ -1,7 +1,7 @@
 package com.fusionkoding.citizenshqapi.client;
 
 import com.fusionkoding.citizenshqapi.client.models.OrgRequestBody;
-import com.fusionkoding.citizenshqapi.client.models.OrgResponse;
+import com.fusionkoding.citizenshqapi.client.models.RsiResponse;
 import com.fusionkoding.citizenshqapi.client.models.ShipMatrixResponse;
 
 import org.springframework.stereotype.Component;
@@ -21,9 +21,9 @@ public class RsiSiteClient {
         return restTemplate.getForObject(SHIP_MATRIX_URL, ShipMatrixResponse.class);
     }
 
-    public OrgResponse getOrgs(long pageNumber) {
+    public RsiResponse getOrgs(long pageNumber) {
         OrgRequestBody orgRequest = OrgRequestBody.builder().page(pageNumber).build();
-        return restTemplate.postForObject(GET_ORGS, orgRequest, OrgResponse.class);
+        return restTemplate.postForObject(GET_ORGS, orgRequest, RsiResponse.class);
     }
 
 }

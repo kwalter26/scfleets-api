@@ -7,7 +7,7 @@ import java.util.TimerTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
 import com.fusionkoding.citizenshqapi.client.models.OrgData;
-import com.fusionkoding.citizenshqapi.client.models.OrgResponse;
+import com.fusionkoding.citizenshqapi.client.models.RsiResponse;
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.services.OrgService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
@@ -40,7 +40,7 @@ public class OrgTask extends TimerTask {
 
         log.info("Fetching page ---- " + pageNumber);
 
-        OrgResponse response = rsiSiteClient.getOrgs(pageNumber);
+        RsiResponse response = rsiSiteClient.getOrgs(pageNumber);
 
         OrgData orgData = response.getData();
         String html = "";
