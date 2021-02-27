@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
 import com.fusionkoding.citizenshqapi.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.springframework.dao.DuplicateKeyException;
@@ -19,7 +20,7 @@ public interface PilotService {
 
   PilotDTO updatePilot(String pilotId, String email, String defaultProfile) throws NotFoundException;
 
-  PilotDTO createReplaceRsiPilot(String pilotId, RsiProfile rsiProfile) throws NotFoundException;
+  PilotDTO createReplaceRsiPilot(String pilotId, RsiProfile rsiProfile) throws NotFoundException, BadRequestException;
 
   PilotDTO updateRsiProfile(String pilotId, String rsiHandle, String rsiProfileImgUrl,
                             String timeZone, Boolean verified, String verificationCode, String ueeRecordNumber, String fluency,
@@ -27,7 +28,15 @@ public interface PilotService {
 
   PilotDTO deleteRsiProfile(String pilotId, String rsiHandle) throws NotFoundException;
 
+  RsiProfile getRsiProfile(String pilotId,String rsiHandle) throws NotFoundException;
+
+  void sendVerificationRsiPilotInfo(String pilotId, String rsiHandle) throws NotFoundException;
+
+  PilotDTO verifyRsiPilotInfo(String pilotId, String rsiHandle, String verificationCode) throws NotFoundException;
+
   void deletePilot(String pilotId) throws NotFoundException;
 
+
   void getRsiPilotInfo(String pilotId) throws NotFoundException;
+
 }

@@ -1,13 +1,16 @@
 package com.fusionkoding.citizenshqapi.services;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.fusionkoding.citizenshqapi.bindings.AuthVerificationBinding;
 import com.fusionkoding.citizenshqapi.bindings.PilotInfoBinding;
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
 import com.fusionkoding.citizenshqapi.entities.Pilot;
 import com.fusionkoding.citizenshqapi.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.repositories.PilotRepository;
+import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.modelmapper.ModelMapper;
@@ -22,9 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 public class PilotServiceImpl implements PilotService {
 
     private final PilotRepository pilotRepository;
+    private final RsiAccountService rsiAccountService;
     private final ModelMapper modelMapper;
     private final PilotInfoBinding pilotBinding;
+    private final AuthVerificationBinding authVerificationBinding;
     private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Pilot Not Found");
+    private static final BadRequestException BAD_REQUEST_EXCEPTION = new BadRequestException();
 
     @Override
     public List<PilotDTO> getPilots() {
@@ -78,23 +84,40 @@ public class PilotServiceImpl implements PilotService {
     @Override
     public void getRsiPilotInfo(String pilotId) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
-        pilot.getRsiProfileMap().forEach((rsiHandle,rsiProfile)->{
+        pilot.getRsiProfileMap().forEach((rsiHandle, rsiProfile) -> {
             pilotBinding.getRsiPilotInfo(pilotId, rsiHandle);
         });
     }
 
     @Override
-    public PilotDTO createReplaceRsiPilot(String pilotId, RsiProfile rsiProfile) throws NotFoundException {
+    public RsiProfile getRsiProfile(String pilotId, String rsiHandle) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
-        if(rsiProfile.getRsiHandle() == null){
+        RsiProfile rsiProfile = pilot.getRsiProfileMap().get(rsiHandle);
+        if (rsiProfile == null) {
             throw NOT_FOUND_EXCEPTION;
         }
-        if(pilot.getRsiProfileMap().size()==0){
+        return rsiProfile;
+    }
+
+    @Override
+    public PilotDTO createReplaceRsiPilot(String pilotId, RsiProfile rsiProfile) throws NotFoundException, BadRequestException {
+        Pilot pilot = getPilot(pilotId);
+        if (rsiProfile.getRsiHandle() == null) {
+            throw BAD_REQUEST_EXCEPTION;
+        }
+        if (pilot.getRsiProfileMap().size() == 0) {
             pilot.setDefaultProfile(rsiProfile.getRsiHandle());
         }
+        boolean verify = pilot.getRsiProfileMap().get(rsiProfile.getRsiHandle()) == null;
+
+
         pilot.getRsiProfileMap().put(rsiProfile.getRsiHandle(), rsiProfile);
+
         Pilot updatePilot = pilotRepository.save(pilot);
         getRsiPilotInfo(pilotId);
+        if (verify) {
+            sendVerificationRsiPilotInfo(pilotId, rsiProfile.getRsiHandle());
+        }
         return convertToDto(updatePilot);
     }
 
@@ -111,9 +134,9 @@ public class PilotServiceImpl implements PilotService {
                                      String location, String orgSymbol) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
         RsiProfile profile = pilot.getRsiProfileMap().get(rsiHandle);
-        if(profile==null){
+        if (profile == null) {
             profile = RsiProfile.builder().rsiHandle(rsiHandle).build();
-            if(pilot.getRsiProfileMap().size()==0){
+            if (pilot.getRsiProfileMap().size() == 0) {
                 pilot.setDefaultProfile(rsiHandle);
             }
         }
@@ -146,7 +169,7 @@ public class PilotServiceImpl implements PilotService {
             profile.setOrgSymbol(orgSymbol);
         }
 
-        pilot.getRsiProfileMap().put(rsiHandle,profile);
+        pilot.getRsiProfileMap().put(rsiHandle, profile);
 
         return convertToDto(pilotRepository.save(pilot));
     }
@@ -158,9 +181,42 @@ public class PilotServiceImpl implements PilotService {
         return convertToDto(pilotRepository.save(pilot));
     }
 
+    @Override
+    public void sendVerificationRsiPilotInfo(String pilotId, String rsiHandle) throws NotFoundException {
+
+        String code = generateVerificationCode();
+
+        updateRsiProfile(pilotId, rsiHandle, null, null, null, code, null, null, null, null, null);
+
+        authVerificationBinding.sendPilotInfoVerification("60305a20af11dc576afa2962", code, pilotId, rsiHandle);
+    }
+
+    private String generateVerificationCode() {
+        Random rand = new Random();
+        String verificationCode = "";
+        for (int i = 0; i < 10; i++) {
+            verificationCode += rand.nextInt(10);
+        }
+        return verificationCode;
+    }
+
+    @Override
+    public PilotDTO verifyRsiPilotInfo(String pilotId, String rsiHandle, String verificationCode) throws NotFoundException {
+        Pilot pilot = getPilot(pilotId);
+        RsiProfile rsiProfile = pilot.getRsiProfileMap().get(rsiHandle);
+        if(rsiProfile != null) {
+            String code = rsiProfile.getVerificationCode();
+            if(code.equals(verificationCode)){
+                return updateRsiProfile(pilotId, rsiHandle, null, null, true, null, null, null, null, null, null);
+            }
+        }
+        throw NOT_FOUND_EXCEPTION;
+    }
+
     private Pilot getPilot(String pilotId) throws NotFoundException {
         return pilotRepository.findById(pilotId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
     }
+
 
     private PilotDTO convertToDto(Pilot org) {
         return modelMapper.map(org, PilotDTO.class);
