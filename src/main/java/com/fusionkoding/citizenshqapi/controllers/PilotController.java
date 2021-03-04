@@ -4,8 +4,10 @@ import java.security.Principal;
 import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
+import com.fusionkoding.citizenshqapi.dtos.VerifyDto;
 import com.fusionkoding.citizenshqapi.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.services.PilotService;
+import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.springframework.http.ResponseEntity;
@@ -79,7 +81,7 @@ public class PilotController {
 
     @PreAuthorize("hasAnyRole('admin','transactions/post')")
     @PostMapping("/{piltoId}/profiles/")
-    public ResponseEntity<PilotDTO> addPilotInfo(@PathVariable String piltoId, @RequestBody RsiProfile rsiProfile) throws NotFoundException {
+    public ResponseEntity<PilotDTO> addPilotInfo(@PathVariable String piltoId, @RequestBody RsiProfile rsiProfile) throws NotFoundException, BadRequestException {
 
         PilotDTO pilotDTO = pilotService.createReplaceRsiPilot(piltoId, rsiProfile);
 
@@ -88,7 +90,7 @@ public class PilotController {
 
     @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
     @PostMapping("/me/profiles/")
-    public ResponseEntity<PilotDTO> addPilotInfo(@AuthenticationPrincipal Jwt jwt, @RequestBody RsiProfile rsiProfile) throws NotFoundException {
+    public ResponseEntity<PilotDTO> addPilotInfo(@AuthenticationPrincipal Jwt jwt, @RequestBody RsiProfile rsiProfile) throws NotFoundException, BadRequestException {
         if (jwt.getSubject().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -108,6 +110,32 @@ public class PilotController {
         String sub = jwt.getSubject();
 
         PilotDTO pilotDTO = pilotService.deleteRsiProfile(sub, rsiHandle);
+
+        return ResponseEntity.ok(pilotDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @GetMapping("/me/profiles/{rsiHandle}/verify/")
+    public ResponseEntity<PilotDTO> sendVerifyPilotInfo(@AuthenticationPrincipal Jwt jwt, @PathVariable String rsiHandle) throws NotFoundException {
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+
+        pilotService.sendVerificationRsiPilotInfo(sub, rsiHandle);
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @PostMapping("/me/profiles/{rsiHandle}/verify/")
+    public ResponseEntity<PilotDTO> verifyPilotInfo(@AuthenticationPrincipal Jwt jwt, @PathVariable String rsiHandle, @RequestBody VerifyDto verifyDto) throws NotFoundException {
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+
+        PilotDTO pilotDTO = pilotService.verifyRsiPilotInfo(sub,rsiHandle,verifyDto.getVerificationCode());
 
         return ResponseEntity.ok(pilotDTO);
     }

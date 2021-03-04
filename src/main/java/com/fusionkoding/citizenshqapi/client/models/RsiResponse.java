@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrgResponse {
+public class RsiResponse {
     String success;
     String code;
     String msg;
