@@ -20,5 +20,11 @@ spring:
 
 authorities: {'access': 'scope', 'user': 'cognito:groups'}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${MANAGEMENT}
+
 
 
