@@ -39,3 +39,4 @@ out/
 ### Docker ###
 .env
 app.yaml
+/blank-app.yaml

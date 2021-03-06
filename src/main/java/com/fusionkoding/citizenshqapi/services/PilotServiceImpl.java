@@ -188,7 +188,7 @@ public class PilotServiceImpl implements PilotService {
 
         updateRsiProfile(pilotId, rsiHandle, null, null, null, code, null, null, null, null, null);
 
-        authVerificationBinding.sendPilotInfoVerification("60305a20af11dc576afa2962", code, pilotId, rsiHandle);
+        authVerificationBinding.sendPilotInfoVerification("604051d0712b7d2162c49975", code, pilotId, rsiHandle);
     }
 
     private String generateVerificationCode() {
