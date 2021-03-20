@@ -1,5 +1,7 @@
 package com.fusionkoding.citizenshqapi.utils;
 
+import java.util.function.Supplier;
+
 public class NotFoundException extends Exception {
 
     public NotFoundException(String argo0) {

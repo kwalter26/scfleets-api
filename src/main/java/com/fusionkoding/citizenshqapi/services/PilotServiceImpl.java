@@ -9,6 +9,7 @@ import com.fusionkoding.citizenshqapi.bindings.PilotInfoBinding;
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
 import com.fusionkoding.citizenshqapi.entities.Pilot;
 import com.fusionkoding.citizenshqapi.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.entities.Setting;
 import com.fusionkoding.citizenshqapi.repositories.PilotRepository;
 import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
@@ -26,6 +27,7 @@ public class PilotServiceImpl implements PilotService {
 
     private final PilotRepository pilotRepository;
     private final RsiAccountService rsiAccountService;
+    private final SettingsService settingsService;
     private final ModelMapper modelMapper;
     private final PilotInfoBinding pilotBinding;
     private final AuthVerificationBinding authVerificationBinding;
@@ -184,11 +186,13 @@ public class PilotServiceImpl implements PilotService {
     @Override
     public void sendVerificationRsiPilotInfo(String pilotId, String rsiHandle) throws NotFoundException {
 
+        Setting defaultAccount = settingsService.getSettingByName("defaultAccount");
+
         String code = generateVerificationCode();
 
         updateRsiProfile(pilotId, rsiHandle, null, null, null, code, null, null, null, null, null);
 
-        authVerificationBinding.sendPilotInfoVerification("604051d0712b7d2162c49975", code, pilotId, rsiHandle);
+        authVerificationBinding.sendPilotInfoVerification(defaultAccount.getValue(), code, pilotId, rsiHandle);
     }
 
     private String generateVerificationCode() {

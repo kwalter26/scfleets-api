@@ -13,11 +13,17 @@ public interface RsiAccountService {
 
     RsiAccountDto getRsiAccountById(String id) throws NotFoundException;
 
+    RsiAccountDto getRsiAccountById() throws NotFoundException;
+
     RsiAccountDto createRsiAccount(RsiAccountCreateDto rsiAccountCreateDto);
 
     RsiAuth getRsiAccountAuth(String id) throws NotFoundException;
 
     RsiAuth updateRsiAuth(String id, RsiAuth rsiAuth)  throws NotFoundException;
+
+    void refreshRsiAuth() throws NotFoundException;
+
+    void refreshRsiAuth(String id) throws NotFoundException;
 
     List<MfaToken> getMfaTokens(String id) throws NotFoundException;
 
