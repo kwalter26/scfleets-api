@@ -127,6 +127,15 @@ public class PilotController {
         return ResponseEntity.accepted().build();
     }
 
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @GetMapping("/{pilotId}/profiles/{rsiHandle}/verify/")
+    public ResponseEntity<PilotDTO> sendVerifyPilotInfo(@PathVariable String pilotId, @PathVariable String rsiHandle) throws NotFoundException {
+
+        pilotService.sendVerificationRsiPilotInfo(pilotId, rsiHandle);
+
+        return ResponseEntity.accepted().build();
+    }
+
     @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
     @PostMapping("/me/profiles/{rsiHandle}/verify/")
     public ResponseEntity<PilotDTO> verifyPilotInfo(@AuthenticationPrincipal Jwt jwt, @PathVariable String rsiHandle, @RequestBody VerifyDto verifyDto) throws NotFoundException {
