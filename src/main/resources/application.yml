@@ -8,15 +8,23 @@ spring:
         jwt:
           issuer-uri: ${JWK_URL}
   rabbitmq:
-    addresses: ${RABBIT_URL}
+    host:
+    exchange:
+      verify: rsi-verify
+      auth: rsi-auth
+      pilot: pilot-info-events
+    queue:
+      verify: rsi-verify.v1-send-verify
+      auth: v1-auth-status
+    routingkey: "#"
+    password:
+    #    port: 5671
+    username:
+    virtual-host:
+    ssl:
+      enabled: true
 
-  cloud:
-    stream:
-      function:
-        definition: generate
-        bindings:
-          getRsiPilotInfo-out-0.destination: pilot-info-events
-        source: getRsiPilotInfo
+
 
 authorities: {'access': 'scope', 'user': 'cognito:groups'}
 
