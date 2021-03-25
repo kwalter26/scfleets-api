@@ -18,9 +18,8 @@ spring:
       auth: v1-auth-status
     routingkey: "#"
     password:
-    #    port: 5671
     username:
-    virtual-host:
+    virtual-host: ${VIRTUAL}
     ssl:
       enabled: true
 
