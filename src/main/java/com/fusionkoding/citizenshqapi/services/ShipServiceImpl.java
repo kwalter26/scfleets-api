@@ -1,17 +1,15 @@
 package com.fusionkoding.citizenshqapi.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.db.entities.Ship;
 import com.fusionkoding.citizenshqapi.db.repositories.ShipRepository;
+import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -44,10 +42,10 @@ public class ShipServiceImpl implements ShipService {
 
     @Override
     public ShipDTO updateShip(String shipId, String name, String productionStatus, Double length, Double beam,
-            Double height, String size, Double mass, String type, Double cargoCapacity, Double minCrew, Double maxCrew,
-            Double scmSpeed, Double afterburnerSpeed, Double pitchMax, Double yawMax, Double rollMax,
-            Double xAxisAcceleration, Double yAxisAcceleration, Double zAxisAcceleration, String timeModified,
-            String focus, String description, String manufacturerCode, String manufacturerName, String imgUrl)
+                              Double height, String size, Double mass, String type, Double cargoCapacity, Double minCrew, Double maxCrew,
+                              Double scmSpeed, Double afterburnerSpeed, Double pitchMax, Double yawMax, Double rollMax,
+                              Double xAxisAcceleration, Double yAxisAcceleration, Double zAxisAcceleration, String timeModified,
+                              String focus, String description, String manufacturerCode, String manufacturerName, String imgUrl)
             throws NotFoundException {
         Ship ship = shipRepository.findById(shipId).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         if (name != null)

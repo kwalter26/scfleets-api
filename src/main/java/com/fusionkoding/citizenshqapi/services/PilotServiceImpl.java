@@ -1,43 +1,41 @@
 package com.fusionkoding.citizenshqapi.services;
 
+import com.fusionkoding.citizenshqapi.bindings.AuthVerificationBinding;
+import com.fusionkoding.citizenshqapi.bindings.PilotInfoBinding;
+import com.fusionkoding.citizenshqapi.db.entities.Pilot;
+import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.db.entities.Setting;
+import com.fusionkoding.citizenshqapi.db.entities.Ship;
+import com.fusionkoding.citizenshqapi.db.repositories.PilotRepository;
+import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
+import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
+import com.fusionkoding.citizenshqapi.utils.BadRequestException;
+import com.fusionkoding.citizenshqapi.utils.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import com.fusionkoding.citizenshqapi.bindings.AuthVerificationBinding;
-import com.fusionkoding.citizenshqapi.bindings.PilotInfoBinding;
-import com.fusionkoding.citizenshqapi.db.entities.Ship;
-import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
-import com.fusionkoding.citizenshqapi.db.entities.Pilot;
-import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
-import com.fusionkoding.citizenshqapi.db.entities.Setting;
-import com.fusionkoding.citizenshqapi.db.repositories.PilotRepository;
-import com.fusionkoding.citizenshqapi.utils.BadRequestException;
-import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
-import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
-import org.modelmapper.ModelMapper;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PilotServiceImpl implements PilotService {
 
+    private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Pilot Not Found");
+    private static final BadRequestException BAD_REQUEST_EXCEPTION = new BadRequestException();
     private final PilotRepository pilotRepository;
     private final RsiAccountService rsiAccountService;
     private final SettingsService settingsService;
     private final ShipService shipService;
-
     private final ModelMapper modelMapper;
     private final PilotInfoBinding pilotBinding;
     private final AuthVerificationBinding authVerificationBinding;
-    private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException("Pilot Not Found");
-    private static final BadRequestException BAD_REQUEST_EXCEPTION = new BadRequestException();
 
     @Override
     public List<PilotDTO> getPilots() {
@@ -226,7 +224,7 @@ public class PilotServiceImpl implements PilotService {
     public List<ShipDTO> getShips(String pilotId) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
         List<Ship> ships = pilot.getShips();
-        if(ships == null){
+        if (ships == null) {
             return new ArrayList<>();
         }
         return ships.stream().map(ship -> shipService.convertToShipDto(ship)).collect(Collectors.toList());

@@ -1,19 +1,17 @@
 package com.fusionkoding.citizenshqapi.services;
 
-import java.util.Timer;
-import java.util.stream.Collectors;
-
 import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
 import com.fusionkoding.citizenshqapi.client.models.ShipMatrixResponse;
 import com.fusionkoding.citizenshqapi.client.models.ShipResponse;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.jobs.OrgTask;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Timer;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

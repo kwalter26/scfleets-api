@@ -3,11 +3,9 @@ package com.fusionkoding.citizenshqapi.client;
 import com.fusionkoding.citizenshqapi.client.models.OrgRequestBody;
 import com.fusionkoding.citizenshqapi.client.models.RsiResponse;
 import com.fusionkoding.citizenshqapi.client.models.ShipMatrixResponse;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component

@@ -1,13 +1,13 @@
 package com.fusionkoding.citizenshqapi.services;
 
 import com.fusionkoding.citizenshqapi.bindings.AuthVerificationBinding;
-import com.fusionkoding.citizenshqapi.dtos.MfaToken;
-import com.fusionkoding.citizenshqapi.dtos.RsiAccountCreateDto;
-import com.fusionkoding.citizenshqapi.dtos.RsiAccountDto;
 import com.fusionkoding.citizenshqapi.db.entities.RsiAccount;
 import com.fusionkoding.citizenshqapi.db.entities.RsiAuth;
 import com.fusionkoding.citizenshqapi.db.entities.Setting;
 import com.fusionkoding.citizenshqapi.db.repositories.RsiAccountRepository;
+import com.fusionkoding.citizenshqapi.dtos.MfaToken;
+import com.fusionkoding.citizenshqapi.dtos.RsiAccountCreateDto;
+import com.fusionkoding.citizenshqapi.dtos.RsiAccountDto;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class RsiAccountServiceImpl implements RsiAccountService {
     @Override
     public List<RsiAccountDto> getRsiAccounts() {
         List<RsiAccount> rsiAccounts = rsiAccountRepository.findAll();
-        return rsiAccounts.stream().map(rsiAccount->
+        return rsiAccounts.stream().map(rsiAccount ->
                 RsiAccountDto.builder().id(rsiAccount.getId()).email(rsiAccount.getEmail()).build()).collect(Collectors.toList());
     }
 
@@ -44,7 +44,7 @@ public class RsiAccountServiceImpl implements RsiAccountService {
     @Override
     public RsiAccountDto getRsiAccountById() throws NotFoundException {
         Setting defaultAccount = settingsService.getSettingByName("defaultAccount");
-        if(defaultAccount == null || defaultAccount.getValue() == null) {
+        if (defaultAccount == null || defaultAccount.getValue() == null) {
             ResponseEntity.badRequest().build();
         }
         return getRsiAccountById(defaultAccount.getValue());
@@ -82,7 +82,7 @@ public class RsiAccountServiceImpl implements RsiAccountService {
     public void refreshRsiAuth(String id) throws NotFoundException {
         RsiAccount rsiAccount = getRsiAccount(id);
         log.debug("Sending auth refresh: " + id);
-        authVerificationBinding.refreshRsiAuth(id,rsiAccount.getEmail(),rsiAccount.getPassword(),rsiAccount.getRsiAuth().getDeviceId());
+        authVerificationBinding.refreshRsiAuth(id, rsiAccount.getEmail(), rsiAccount.getPassword(), rsiAccount.getRsiAuth().getDeviceId());
         log.info("Sent auth refresh: " + id);
     }
 

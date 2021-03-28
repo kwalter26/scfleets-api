@@ -1,9 +1,9 @@
 package com.fusionkoding.citizenshqapi.web.controllers;
 
+import com.fusionkoding.citizenshqapi.db.entities.RsiAuth;
 import com.fusionkoding.citizenshqapi.dtos.MfaToken;
 import com.fusionkoding.citizenshqapi.dtos.RsiAccountCreateDto;
 import com.fusionkoding.citizenshqapi.dtos.RsiAccountDto;
-import com.fusionkoding.citizenshqapi.db.entities.RsiAuth;
 import com.fusionkoding.citizenshqapi.services.RsiAccountService;
 import com.fusionkoding.citizenshqapi.services.SettingsService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
@@ -68,9 +68,9 @@ public class RsiAccountController {
     }
 
     @PostMapping("/{id}/auth/")
-    public ResponseEntity<RsiAuth> updateRsiAccountAuth(@PathVariable String id,@RequestBody RsiAuth rsiAuth) throws NotFoundException {
+    public ResponseEntity<RsiAuth> updateRsiAccountAuth(@PathVariable String id, @RequestBody RsiAuth rsiAuth) throws NotFoundException {
         log.debug("Updating RSI Account auth" + id);
-        return ResponseEntity.ok(rsiAccountService.updateRsiAuth(id,rsiAuth));
+        return ResponseEntity.ok(rsiAccountService.updateRsiAuth(id, rsiAuth));
     }
 
     @GetMapping("/{id}/tokens/")
@@ -80,9 +80,9 @@ public class RsiAccountController {
     }
 
     @PostMapping("/{id}/tokens/")
-    public ResponseEntity<MfaToken> createRsiAccountToken(@PathVariable String id,@RequestBody MfaToken mfaToken) throws NotFoundException {
+    public ResponseEntity<MfaToken> createRsiAccountToken(@PathVariable String id, @RequestBody MfaToken mfaToken) throws NotFoundException {
         log.debug("Adding RSI Account token" + id);
-        return ResponseEntity.ok(rsiAccountService.addMfaToken(id,mfaToken));
+        return ResponseEntity.ok(rsiAccountService.addMfaToken(id, mfaToken));
     }
 
     @GetMapping("/{id}/tokens/use/")

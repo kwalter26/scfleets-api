@@ -56,7 +56,7 @@ public class RabbitMQConfig {
         this.sslEnabled = sslEnabled;
     }
 
-//    @Bean
+    //    @Bean
 //    Queue verifyQueue() {
 //        return new Queue(verifyQueue, true);
 //    }
@@ -65,7 +65,8 @@ public class RabbitMQConfig {
     Queue authQueue() {
         return new Queue(authQueue, true, true, true);
     }
-//
+
+    //
 //    @Bean
 //    Exchange verifyExchange() {
 //        return ExchangeBuilder.topicExchange(verifyExchange).durable(true).build();
@@ -75,7 +76,8 @@ public class RabbitMQConfig {
     Exchange authExchange() {
         return ExchangeBuilder.topicExchange(authExchange).durable(true).build();
     }
-//
+
+    //
 //    @Bean
 //    Binding verifyBinding() {
 //        return BindingBuilder

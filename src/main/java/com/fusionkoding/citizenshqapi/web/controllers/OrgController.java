@@ -1,34 +1,23 @@
 package com.fusionkoding.citizenshqapi.web.controllers;
 
-import java.util.List;
-
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.services.OrgService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/orgs")
-@Api(tags = { "Orgs" }, value = "Orgs", description = "Routes used for maintaining origization data.")
+@Api(tags = {"Orgs"}, value = "Orgs", description = "Routes used for maintaining origization data.")
 public class OrgController {
 
     private final OrgService orgService;
@@ -68,12 +57,12 @@ public class OrgController {
     @ApiOperation(value = "Update an existing org with specific fields")
     @PatchMapping("/{orgId}/")
     public ResponseEntity<OrgDTO> updateOrg(@PathVariable String orgId, @RequestParam(required = false) String name,
-            @RequestParam(required = false) String symbol, @RequestParam(required = false) String description,
-            String leaderHandle, @RequestParam(required = false) String imageUrl,
-            @RequestParam(required = false) String archeType, @RequestParam(required = false) String lang,
-            @RequestParam(required = false) String commitment, @RequestParam(required = false) Boolean recruiting,
-            @RequestParam(required = false) Boolean rolePlay, @RequestParam(required = false) Long members,
-            @RequestParam(required = false) String uri) throws NotFoundException {
+                                            @RequestParam(required = false) String symbol, @RequestParam(required = false) String description,
+                                            String leaderHandle, @RequestParam(required = false) String imageUrl,
+                                            @RequestParam(required = false) String archeType, @RequestParam(required = false) String lang,
+                                            @RequestParam(required = false) String commitment, @RequestParam(required = false) Boolean recruiting,
+                                            @RequestParam(required = false) Boolean rolePlay, @RequestParam(required = false) Long members,
+                                            @RequestParam(required = false) String uri) throws NotFoundException {
         return ResponseEntity.ok(orgService.updateOrg(orgId, name, symbol, description, leaderHandle, imageUrl,
                 archeType, lang, commitment, recruiting, rolePlay, members, uri));
     }

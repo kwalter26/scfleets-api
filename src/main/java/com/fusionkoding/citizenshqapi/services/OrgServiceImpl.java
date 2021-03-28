@@ -1,19 +1,17 @@
 package com.fusionkoding.citizenshqapi.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.db.entities.Org;
 import com.fusionkoding.citizenshqapi.db.repositories.OrgRepository;
+import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,8 +66,8 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public OrgDTO updateOrgWithSymbol(String symbol, String name, String description, String leaderHandle,
-            String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members, String uri) throws NotFoundException {
+                                      String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
+                                      Long members, String uri) throws NotFoundException {
         log.debug("Updating org for: " + name);
         Org org = orgRepository.findBySymbol(symbol).orElseThrow(() -> NOT_FOUND_EXCEPTION);
         updateOrParameters(name, description, leaderHandle, imageUrl, archeType, lang, commitment, recruiting, rolePlay,
@@ -81,8 +79,8 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public OrgDTO updateOrg(String orgId, String symbol, String name, String description, String leaderHandle,
-            String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members, String uri) throws NotFoundException {
+                            String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
+                            Long members, String uri) throws NotFoundException {
         Org org;
         log.debug("Updating org for: " + name);
 
@@ -99,8 +97,8 @@ public class OrgServiceImpl implements OrgService {
     }
 
     private void updateOrParameters(String name, String description, String leaderHandle, String imageUrl,
-            String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay, Long members,
-            String uri, Org org) {
+                                    String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay, Long members,
+                                    String uri, Org org) {
         if (name != null) {
             org.setName(name);
         }

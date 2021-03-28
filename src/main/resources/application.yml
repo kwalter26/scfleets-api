@@ -25,7 +25,7 @@ spring:
 
 
 
-authorities: {'access': 'scope', 'user': 'cognito:groups'}
+authorities: { 'access': 'scope', 'user': 'cognito:groups' }
 
 management:
   endpoints:

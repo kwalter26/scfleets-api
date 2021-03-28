@@ -2,7 +2,6 @@ package com.fusionkoding.citizenshqapi.bindings;
 
 import com.fusionkoding.citizenshqapi.bindings.models.InfoRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;

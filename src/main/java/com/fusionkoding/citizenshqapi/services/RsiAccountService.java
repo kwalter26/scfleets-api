@@ -1,9 +1,9 @@
 package com.fusionkoding.citizenshqapi.services;
 
+import com.fusionkoding.citizenshqapi.db.entities.RsiAuth;
 import com.fusionkoding.citizenshqapi.dtos.MfaToken;
 import com.fusionkoding.citizenshqapi.dtos.RsiAccountCreateDto;
 import com.fusionkoding.citizenshqapi.dtos.RsiAccountDto;
-import com.fusionkoding.citizenshqapi.db.entities.RsiAuth;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface RsiAccountService {
 
     RsiAuth getRsiAccountAuth(String id) throws NotFoundException;
 
-    RsiAuth updateRsiAuth(String id, RsiAuth rsiAuth)  throws NotFoundException;
+    RsiAuth updateRsiAuth(String id, RsiAuth rsiAuth) throws NotFoundException;
 
     void refreshRsiAuth() throws NotFoundException;
 
@@ -27,7 +27,7 @@ public interface RsiAccountService {
 
     List<MfaToken> getMfaTokens(String id) throws NotFoundException;
 
-    MfaToken useMfaToken(String id)  throws NotFoundException;
+    MfaToken useMfaToken(String id) throws NotFoundException;
 
     MfaToken addMfaToken(String id, MfaToken mfaToken) throws NotFoundException;
 

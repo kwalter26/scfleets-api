@@ -1,7 +1,6 @@
 package com.fusionkoding.citizenshqapi.bindings.models;
 
 import lombok.*;
-import org.springframework.messaging.handler.annotation.SendTo;
 
 @Getter
 @Setter

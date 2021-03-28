@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class SettingsServiceImpl implements SettingsService{
+public class SettingsServiceImpl implements SettingsService {
 
     private final SettingsRepository settingsRepository;
 
     @Override
     public Map<String, Setting> getSettings() {
-        return settingsRepository.findAll().stream().collect(Collectors.toMap(Setting::getValue,setting -> setting));
+        return settingsRepository.findAll().stream().collect(Collectors.toMap(Setting::getValue, setting -> setting));
     }
 
     @Override

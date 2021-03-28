@@ -16,13 +16,13 @@ public class AuthStatusBinding {
 
     private final RsiAccountService rsiAccountService;
 
-    @RabbitListener(queues = "#{rabbitMQConfig.getAuthQueue()}" )
+    @RabbitListener(queues = "#{rabbitMQConfig.getAuthQueue()}")
     public void receivedAuthNotifyMessage(Message<AuthNotify> authNotifyMessage) {
-        if(!authNotifyMessage.getPayload().isAuthenticated()){
+        if (!authNotifyMessage.getPayload().isAuthenticated()) {
             try {
                 rsiAccountService.refreshRsiAuth();
             } catch (NotFoundException e) {
-                log.error(e.getLocalizedMessage(),e);
+                log.error(e.getLocalizedMessage(), e);
             }
         }
     }

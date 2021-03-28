@@ -7,8 +7,11 @@ import java.util.Map;
 
 
 public interface SettingsService {
-    Map<String,Setting> getSettings();
+    Map<String, Setting> getSettings();
+
     Setting createSetting(Setting setting);
+
     Setting getSettingByName(String name) throws NotFoundException;
+
     Setting updateSettingByName(String name, String value) throws NotFoundException;
 }

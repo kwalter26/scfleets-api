@@ -1,7 +1,8 @@
 package com.fusionkoding.citizenshqapi.web.controllers;
 
 import com.fusionkoding.citizenshqapi.services.DataLoaderService;
-
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,14 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
 @RequestMapping("/loader")
 @Controller
 @Api(tags = {
-        "Data Loader" }, value = "DataLoader", description = "Routes used for maintaining the population of RSI specific data.")
+        "Data Loader"}, value = "DataLoader", description = "Routes used for maintaining the population of RSI specific data.")
 public class DataLoaderController {
 
     private final DataLoaderService dataLoaderService;

@@ -1,26 +1,24 @@
 package com.fusionkoding.citizenshqapi.web.controllers;
 
-import java.security.Principal;
-import java.util.List;
-
+import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.dtos.VerifyDto;
-import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.services.PilotService;
 import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -145,7 +143,7 @@ public class PilotController {
         }
         String sub = jwt.getSubject();
 
-        PilotDTO pilotDTO = pilotService.verifyRsiPilotInfo(sub,rsiHandle,verifyDto.getVerificationCode());
+        PilotDTO pilotDTO = pilotService.verifyRsiPilotInfo(sub, rsiHandle, verifyDto.getVerificationCode());
 
         return ResponseEntity.ok(pilotDTO);
     }
@@ -180,7 +178,7 @@ public class PilotController {
     @PreAuthorize("hasAnyRole('admin','transactions/post')")
     @PostMapping("/{pilotId}/ships/")
     public ResponseEntity<ShipDTO> addPilotsShip(@PathVariable String pilotId, @RequestParam String shipId) throws NotFoundException {
-        return ResponseEntity.ok(pilotService.addShip(pilotId,shipId));
+        return ResponseEntity.ok(pilotService.addShip(pilotId, shipId));
     }
 
 

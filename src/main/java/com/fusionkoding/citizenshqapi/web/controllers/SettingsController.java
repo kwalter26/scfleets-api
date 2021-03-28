@@ -34,7 +34,7 @@ public class SettingsController {
     }
 
     @PutMapping("/{name}/")
-    public ResponseEntity<Setting> updateSetting(@PathVariable String name,@RequestBody String value) throws NotFoundException {
-        return ResponseEntity.ok(settingsService.updateSettingByName(name,value));
+    public ResponseEntity<Setting> updateSetting(@PathVariable String name, @RequestBody String value) throws NotFoundException {
+        return ResponseEntity.ok(settingsService.updateSettingByName(name, value));
     }
 }

@@ -1,9 +1,5 @@
 package com.fusionkoding.citizenshqapi.jobs;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fusionkoding.citizenshqapi.client.RsiSiteClient;
 import com.fusionkoding.citizenshqapi.client.models.OrgData;
@@ -11,22 +7,24 @@ import com.fusionkoding.citizenshqapi.client.models.RsiResponse;
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.services.OrgService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Slf4j
 public class OrgTask extends TimerTask {
-    private long pageNumber = 1;
-    private RsiSiteClient rsiSiteClient;
-    private OrgService orgService;
     ObjectMapper mapper;
     List<OrgDTO> orgs;
     Timer timer;
+    private long pageNumber = 1;
+    private RsiSiteClient rsiSiteClient;
+    private OrgService orgService;
 
     public OrgTask(RsiSiteClient rsiSiteClient, OrgService orgService, Timer timer) {
         this.rsiSiteClient = rsiSiteClient;

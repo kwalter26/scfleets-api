@@ -1,11 +1,10 @@
 package com.fusionkoding.citizenshqapi.services;
 
-import java.util.List;
-
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
-
 import org.springframework.dao.DuplicateKeyException;
+
+import java.util.List;
 
 public interface OrgService {
 
@@ -20,12 +19,12 @@ public interface OrgService {
     public OrgDTO replaceOrg(String orgId, OrgDTO orgDTO) throws NotFoundException;
 
     public OrgDTO updateOrg(String orgId, String name, String symbol, String description, String leaderHandle,
-            String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members, String uri) throws NotFoundException;
+                            String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
+                            Long members, String uri) throws NotFoundException;
 
     public OrgDTO updateOrgWithSymbol(String name, String symbol, String description, String leaderHandle,
-            String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
-            Long members, String uri) throws NotFoundException;
+                                      String imageUrl, String archeType, String lang, String commitment, Boolean recruiting, Boolean rolePlay,
+                                      Long members, String uri) throws NotFoundException;
 
     public void deleteOrg(String orgId) throws NotFoundException;
 
