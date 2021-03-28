@@ -1,7 +1,6 @@
-package com.fusionkoding.citizenshqapi.entities;
+package com.fusionkoding.citizenshqapi.db.entities;
 
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 

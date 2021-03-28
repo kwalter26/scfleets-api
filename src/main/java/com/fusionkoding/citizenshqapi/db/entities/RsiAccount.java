@@ -1,4 +1,4 @@
-package com.fusionkoding.citizenshqapi.entities;
+package com.fusionkoding.citizenshqapi.db.entities;
 
 import com.fusionkoding.citizenshqapi.dtos.MfaToken;
 import lombok.AllArgsConstructor;

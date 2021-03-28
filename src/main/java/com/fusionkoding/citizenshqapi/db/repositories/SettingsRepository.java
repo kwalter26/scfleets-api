@@ -1,6 +1,6 @@
-package com.fusionkoding.citizenshqapi.repositories;
+package com.fusionkoding.citizenshqapi.db.repositories;
 
-import com.fusionkoding.citizenshqapi.entities.Setting;
+import com.fusionkoding.citizenshqapi.db.entities.Setting;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

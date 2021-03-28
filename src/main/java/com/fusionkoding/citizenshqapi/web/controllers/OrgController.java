@@ -1,4 +1,4 @@
-package com.fusionkoding.citizenshqapi.controllers;
+package com.fusionkoding.citizenshqapi.web.controllers;
 
 import java.util.List;
 

@@ -1,11 +1,12 @@
-package com.fusionkoding.citizenshqapi.controllers;
+package com.fusionkoding.citizenshqapi.web.controllers;
 
 import java.security.Principal;
 import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
+import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import com.fusionkoding.citizenshqapi.dtos.VerifyDto;
-import com.fusionkoding.citizenshqapi.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.services.PilotService;
 import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
@@ -169,5 +170,18 @@ public class PilotController {
 
         return ResponseEntity.ok(pilotDTO);
     }
+
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @GetMapping("/{pilotId}/ships/")
+    public ResponseEntity<List<ShipDTO>> getPilotsShips(@PathVariable String pilotId) throws NotFoundException {
+        return ResponseEntity.ok(pilotService.getShips(pilotId));
+    }
+
+    @PreAuthorize("hasAnyRole('admin','transactions/post')")
+    @PostMapping("/{pilotId}/ships/")
+    public ResponseEntity<ShipDTO> addPilotsShip(@PathVariable String pilotId, @RequestParam String shipId) throws NotFoundException {
+        return ResponseEntity.ok(pilotService.addShip(pilotId,shipId));
+    }
+
 
 }

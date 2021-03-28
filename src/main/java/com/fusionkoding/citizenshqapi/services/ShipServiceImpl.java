@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
-import com.fusionkoding.citizenshqapi.entities.Ship;
-import com.fusionkoding.citizenshqapi.repositories.ShipRepository;
+import com.fusionkoding.citizenshqapi.db.entities.Ship;
+import com.fusionkoding.citizenshqapi.db.repositories.ShipRepository;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.modelmapper.ModelMapper;
@@ -116,11 +116,11 @@ public class ShipServiceImpl implements ShipService {
         shipRepository.delete(ship);
     }
 
-    private ShipDTO convertToShipDto(Ship ship) {
+    public ShipDTO convertToShipDto(Ship ship) {
         return modelMapper.map(ship, ShipDTO.class);
     }
 
-    private Ship convertToShip(ShipDTO shipDto) {
+    public Ship convertToShip(ShipDTO shipDto) {
         return modelMapper.map(shipDto, Ship.class);
     }
 

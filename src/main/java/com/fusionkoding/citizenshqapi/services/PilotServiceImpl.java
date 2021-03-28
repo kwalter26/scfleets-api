@@ -1,19 +1,22 @@
 package com.fusionkoding.citizenshqapi.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.fusionkoding.citizenshqapi.bindings.AuthVerificationBinding;
 import com.fusionkoding.citizenshqapi.bindings.PilotInfoBinding;
+import com.fusionkoding.citizenshqapi.db.entities.Ship;
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
-import com.fusionkoding.citizenshqapi.entities.Pilot;
-import com.fusionkoding.citizenshqapi.entities.RsiProfile;
-import com.fusionkoding.citizenshqapi.entities.Setting;
-import com.fusionkoding.citizenshqapi.repositories.PilotRepository;
+import com.fusionkoding.citizenshqapi.db.entities.Pilot;
+import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.db.entities.Setting;
+import com.fusionkoding.citizenshqapi.db.repositories.PilotRepository;
 import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
+import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,8 @@ public class PilotServiceImpl implements PilotService {
     private final PilotRepository pilotRepository;
     private final RsiAccountService rsiAccountService;
     private final SettingsService settingsService;
+    private final ShipService shipService;
+
     private final ModelMapper modelMapper;
     private final PilotInfoBinding pilotBinding;
     private final AuthVerificationBinding authVerificationBinding;
@@ -208,13 +213,32 @@ public class PilotServiceImpl implements PilotService {
     public PilotDTO verifyRsiPilotInfo(String pilotId, String rsiHandle, String verificationCode) throws NotFoundException {
         Pilot pilot = getPilot(pilotId);
         RsiProfile rsiProfile = pilot.getRsiProfileMap().get(rsiHandle);
-        if(rsiProfile != null) {
+        if (rsiProfile != null) {
             String code = rsiProfile.getVerificationCode();
-            if(code.equals(verificationCode)){
+            if (code.equals(verificationCode)) {
                 return updateRsiProfile(pilotId, rsiHandle, null, null, true, null, null, null, null, null, null);
             }
         }
         throw NOT_FOUND_EXCEPTION;
+    }
+
+    @Override
+    public List<ShipDTO> getShips(String pilotId) throws NotFoundException {
+        Pilot pilot = getPilot(pilotId);
+        List<Ship> ships = pilot.getShips();
+        if(ships == null){
+            return new ArrayList<>();
+        }
+        return ships.stream().map(ship -> shipService.convertToShipDto(ship)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ShipDTO addShip(String pilotId, String shipId) throws NotFoundException {
+        Pilot pilot = getPilot(pilotId);
+        ShipDTO ship = shipService.getShipById(shipId);
+        pilot.getShips().add(shipService.convertToShip(ship));
+        pilotRepository.save(pilot);
+        return ship;
     }
 
     private Pilot getPilot(String pilotId) throws NotFoundException {

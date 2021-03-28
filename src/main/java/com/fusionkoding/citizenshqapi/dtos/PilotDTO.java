@@ -1,6 +1,6 @@
 package com.fusionkoding.citizenshqapi.dtos;
 
-import com.fusionkoding.citizenshqapi.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Map;
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -20,4 +22,5 @@ public class PilotDTO {
   private String email;
   private String defaultProfile;
   private Map<String, RsiProfile> rsiProfileMap;
+  private List<ShipDTO> ships;
 }

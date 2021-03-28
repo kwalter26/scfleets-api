@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fusionkoding.citizenshqapi.dtos.OrgDTO;
-import com.fusionkoding.citizenshqapi.entities.Org;
-import com.fusionkoding.citizenshqapi.repositories.OrgRepository;
+import com.fusionkoding.citizenshqapi.db.entities.Org;
+import com.fusionkoding.citizenshqapi.db.repositories.OrgRepository;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import org.modelmapper.ModelMapper;

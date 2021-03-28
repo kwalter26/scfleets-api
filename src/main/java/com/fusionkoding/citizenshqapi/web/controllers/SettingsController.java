@@ -1,6 +1,6 @@
-package com.fusionkoding.citizenshqapi.controllers;
+package com.fusionkoding.citizenshqapi.web.controllers;
 
-import com.fusionkoding.citizenshqapi.entities.Setting;
+import com.fusionkoding.citizenshqapi.db.entities.Setting;
 import com.fusionkoding.citizenshqapi.services.SettingsService;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 import lombok.RequiredArgsConstructor;

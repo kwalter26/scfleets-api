@@ -3,7 +3,7 @@ package com.fusionkoding.citizenshqapi.services;
 import com.fusionkoding.citizenshqapi.dtos.MfaToken;
 import com.fusionkoding.citizenshqapi.dtos.RsiAccountCreateDto;
 import com.fusionkoding.citizenshqapi.dtos.RsiAccountDto;
-import com.fusionkoding.citizenshqapi.entities.RsiAuth;
+import com.fusionkoding.citizenshqapi.db.entities.RsiAuth;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import java.util.List;

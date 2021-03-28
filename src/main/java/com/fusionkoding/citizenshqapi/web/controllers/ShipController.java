@@ -1,4 +1,4 @@
-package com.fusionkoding.citizenshqapi.controllers;
+package com.fusionkoding.citizenshqapi.web.controllers;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ShipController {
 
     public final ShipService shipService;
 
-    @PreAuthorize("hasAnyRole('pilot','admin')")
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
     @ApiOperation(value = "View a list of available ship")
     @GetMapping("/")
     public ResponseEntity<List<ShipDTO>> getShips() {

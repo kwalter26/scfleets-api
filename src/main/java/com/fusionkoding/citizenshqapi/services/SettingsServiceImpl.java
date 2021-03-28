@@ -1,7 +1,7 @@
 package com.fusionkoding.citizenshqapi.services;
 
-import com.fusionkoding.citizenshqapi.entities.Setting;
-import com.fusionkoding.citizenshqapi.repositories.SettingsRepository;
+import com.fusionkoding.citizenshqapi.db.entities.Setting;
+import com.fusionkoding.citizenshqapi.db.repositories.SettingsRepository;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.fusionkoding.citizenshqapi.entities;
+package com.fusionkoding.citizenshqapi.db.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

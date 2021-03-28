@@ -3,10 +3,11 @@ package com.fusionkoding.citizenshqapi.services;
 import java.util.List;
 
 import com.fusionkoding.citizenshqapi.dtos.PilotDTO;
-import com.fusionkoding.citizenshqapi.entities.RsiProfile;
+import com.fusionkoding.citizenshqapi.db.entities.RsiProfile;
 import com.fusionkoding.citizenshqapi.utils.BadRequestException;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
+import com.fusionkoding.citizenshqapi.dtos.ShipDTO;
 import org.springframework.dao.DuplicateKeyException;
 
 public interface PilotService {
@@ -36,7 +37,9 @@ public interface PilotService {
 
   void deletePilot(String pilotId) throws NotFoundException;
 
-
   void getRsiPilotInfo(String pilotId) throws NotFoundException;
 
+  List<ShipDTO> getShips(String pilotId) throws NotFoundException;
+
+  ShipDTO addShip(String pilotId, String shipId) throws NotFoundException;
 }

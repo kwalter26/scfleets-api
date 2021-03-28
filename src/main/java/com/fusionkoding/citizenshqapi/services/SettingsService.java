@@ -1,6 +1,6 @@
 package com.fusionkoding.citizenshqapi.services;
 
-import com.fusionkoding.citizenshqapi.entities.Setting;
+import com.fusionkoding.citizenshqapi.db.entities.Setting;
 import com.fusionkoding.citizenshqapi.utils.NotFoundException;
 
 import java.util.Map;
