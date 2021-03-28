@@ -181,5 +181,15 @@ public class PilotController {
         return ResponseEntity.ok(pilotService.addShip(pilotId, shipId));
     }
 
+    @PreAuthorize("hasAnyRole('pilot','admin','transactions/post')")
+    @PostMapping("/me/ships/")
+    public ResponseEntity<ShipDTO> addPilotsShip(@AuthenticationPrincipal Jwt jwt, @RequestParam String shipId) throws NotFoundException {
+        if (jwt.getSubject().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String sub = jwt.getSubject();
+        return ResponseEntity.ok(pilotService.addShip(sub, shipId));
+    }
+
 
 }
