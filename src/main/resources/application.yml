@@ -23,8 +23,6 @@ spring:
     ssl:
       enabled: true
 
-
-
 authorities: { 'access': 'scope', 'user': 'cognito:groups' }
 
 management:
