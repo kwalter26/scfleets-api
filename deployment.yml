@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scfleets-api-deployment
+  namespace: scfleets
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scfleets-api
+  template:
+    metadata:
+      labels:
+        app: scfleets-api
+    spec:
+      containers:
+        - name: scfleets-api
+          image: kwalter26/scfleets-api
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: scfleets-api-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scfleets-api-service
+  namespace: scfleets
+  labels:
+    app: scfleets-api
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      name: web
+  selector:
+    app: scfleets-api
